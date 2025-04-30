@@ -1,13 +1,13 @@
 import React, { useEffect, useState, useRef } from 'react';
-import { FaSearch, FaBalanceScale, FaGavel, FaRobot, FaTachometerAlt, FaArrowRight } from 'react-icons/fa';
+import { FaGavel, FaRobot } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
+import { useAuth } from '../../context/AuthContext';
+import { motion } from 'framer-motion';
 
 function Hero() {
   const [isBalanced, setIsBalanced] = useState(true);
-  const [searchFocus, setSearchFocus] = useState(false);
-  const [searchValue, setSearchValue] = useState('');
-  const searchRef = useRef(null);
   const balanceRef = useRef(null);
+  const { currentUser } = useAuth();
 
   // Animation for the balance scale
   useEffect(() => {
@@ -18,99 +18,129 @@ function Hero() {
   }, []);
 
   return (
-    <div className="w-full min-h-screen flex items-center justify-center py-20 sm:py-32" style={{ backgroundColor: '#f3eee5' }}>
+    <div className="w-full min-h-screen flex items-center justify-center py-8" 
+         style={{ backgroundColor: '#f3eee5' }}>
       <div className="container mx-auto max-w-7xl px-6 sm:px-8">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12">
-          {/* Left side with logo and text */}
-          <div className="lg:col-span-6 flex flex-col items-center text-center">
-            <div className="mb-8">
-              <h1 className="text-[#251c1a] text-6xl md:text-7xl font-bold tracking-tighter">
-                <span className="text-8xl md:text-9xl">L</span>awgic
-              </h1>
-              <div className="h-1 w-16 bg-[#251c1a] my-4 mx-auto"></div>
-              <p className="text-[#251c1a]/80 text-xl md:text-2xl font-light italic">
-                Think Law. Think Logic.
-              </p>
-            </div>
+          {/* Left side with increased margin */}
+          <div className="lg:col-span-6 flex flex-col items-center lg:items-start text-center lg:text-left relative z-10 lg:ml-6">
+            {/* Subtle gradient backgrounds */}
+            <div className="absolute -top-32 -left-32 w-64 h-64 rounded-full bg-[#b19f84]/5 blur-3xl"></div>
             
-            <p className="text-[#251c1a]/70 text-lg mb-8 max-w-lg mx-auto">
-              Navigate the complexities of law with precision and clarity. 
-              The most advanced legal search engine powered by AI.
-            </p>
-            
-            {/* Search Bar */}
-            <div 
-              ref={searchRef}
-              className={`w-full max-w-xl relative mx-auto transition-all duration-300 ${
-                searchFocus ? 'shadow-lg' : 'shadow-md'
-              }`}
-            >
-              <div className={`bg-white rounded-full p-2 pl-6 flex items-center transition-all duration-300 ${
-                searchFocus ? 'ring-2 ring-[#251c1a]' : ''
-              }`}>
-                <input
-                  type="text"
-                  placeholder="Search legal cases, documents, precedents..."
-                  className="bg-transparent w-full py-3 outline-none text-[#251c1a] placeholder-[#251c1a]/50"
-                  onFocus={() => setSearchFocus(true)}
-                  onBlur={() => setSearchFocus(false)}
-                  value={searchValue}
-                  onChange={(e) => setSearchValue(e.target.value)}
-                />
-                
-                <button className={`ml-2 rounded-full p-4 flex items-center justify-center transition-all ${
-                  searchFocus ? 'bg-[#251c1a] text-white' : 'bg-[#251c1a]/10 text-[#251c1a]'
-                }`}>
-                  <FaSearch className={`${searchFocus ? 'scale-110' : ''} transition-transform`} />
-                </button>
-              </div>
-            </div>
-            
-            <div className="mt-4 text-[#251c1a]/60 text-sm">
-              Try searching: "recent supreme court decisions" or "contract templates"
-            </div>
-
-            {/* Interactive Buttons */}
-            <div className="mt-10 flex flex-col sm:flex-row gap-4 w-full max-w-xl mx-auto">
-              <Link 
-                to="/chatbot"
-                className="flex-1 group bg-gradient-to-r from-[#251c1a] to-[#3a2e2b] text-[#f3eee5] py-4 px-6 rounded-xl flex items-center justify-between shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1"
+            {/* Reduced size heading */}
+            <motion.div 
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 0.6 }}
+              className="mb-8"
+            >              
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.7 }}
+                className="relative"
               >
-                <div className="flex items-center">
-                  <div className="bg-[#f3eee5]/20 p-3 rounded-lg mr-3">
-                    <FaRobot className="text-xl" />
-                  </div>
-                  <div className="text-left">
-                    <h3 className="font-semibold text-lg">Lawgic AI</h3>
-                    <p className="text-[#f3eee5]/70 text-sm">Chat with our legal assistant</p>
-                  </div>
+                <div className="relative">
+                  <h1 className="text-[#251c1a] text-6xl sm:text-7xl md:text-8xl font-bold tracking-tight relative">
+                    <span className="inline-block relative text-[1.3em]">
+                      <span>L</span>
+                      <motion.span 
+                        initial={{ width: 0 }}
+                        animate={{ width: "100%" }}
+                        transition={{ duration: 1, delay: 0.8 }}
+                        className="absolute bottom-2 left-0 h-1.5 bg-[#b19f84]"
+                      ></motion.span>
+                    </span>
+                    <span className="inline-block relative">awgic</span>
+                  </h1>
                 </div>
-                <FaArrowRight className="transform group-hover:translate-x-1 transition-transform" />
+                
+                {/* Enhanced tagline with a more stylized look */}
+                <motion.div
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ duration: 0.8, delay: 0.4 }}
+                  className="text-[#251c1a] mt-5 flex flex-col sm:flex-row items-center sm:gap-4"
+                >
+                  <div className="flex items-center relative">
+                    <span className="font-serif italic text-xl sm:text-2xl pr-1 relative">
+                      Think 
+                      <span className="absolute bottom-0 left-0 w-full h-0.5 bg-[#b19f84]/60"></span>
+                    </span>
+                    <span className="font-bold text-xl sm:text-2xl text-[#251c1a]/90 pl-1">Law</span>
+                  </div>
+                  
+                  <span className="hidden sm:block">
+                    <div className="h-5 w-0.5 bg-[#251c1a]/30 transform rotate-12 mx-1"></div>
+                  </span>
+                  
+                  <div className="flex items-center relative">
+                    <span className="font-serif italic text-xl sm:text-2xl pr-1 relative">
+                      Think
+                      <span className="absolute bottom-0 left-0 w-full h-0.5 bg-[#b19f84]/60"></span>
+                    </span>
+                    <span className="font-bold text-xl sm:text-2xl text-[#251c1a]/90 pl-1">Logic</span>
+                  </div>
+                </motion.div>
+              </motion.div>
+            </motion.div>
+            
+            {/* Description */}
+            <motion.div
+              initial={{ opacity: 0, y: 15 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.7, delay: 0.6 }} 
+              className="mb-12 relative max-w-lg"
+            >
+              <div className="relative">
+                <span className="absolute -left-5 top-0 bottom-0 w-0.5 bg-gradient-to-b from-[#251c1a] to-transparent hidden lg:block"></span>
+                <p className="text-[#251c1a]/70 text-lg md:text-xl leading-relaxed">
+                  Transform legal complexity into clarity with our powerful AI assistant. 
+                  Get insights, analysis, and answers with the precision of legal expertise.
+                </p>
+              </div>
+            </motion.div>
+            
+            {/* CTA button */}
+            <motion.div 
+              initial={{ opacity: 0, y: 15 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.7, delay: 0.8 }}
+              className="w-full max-w-md mx-auto lg:mx-0"
+            >
+              <Link 
+                to={currentUser ? "/dashboard" : "/signup"}
+                className="relative group inline-flex items-center"
+              >
+                <span className="absolute inset-0 rounded-full bg-[#251c1a] transform group-hover:scale-105 transition-transform duration-300 shadow-lg group-hover:shadow-xl"></span>
+                <span className="relative flex items-center justify-center gap-3 text-[#f3eee5] font-medium py-4 px-7 rounded-full border border-[#f3eee5]/20">
+                  <FaRobot className="text-xl" />
+                  <span className="text-lg">Try Lawgic AI</span>
+                  <svg className="w-5 h-5 group-hover:translate-x-1 transition-transform duration-300" viewBox="0 0 20 20" fill="currentColor">
+                    <path fillRule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clipRule="evenodd" />
+                  </svg>
+                </span>
               </Link>
               
-              <Link 
-                to="/dashboard"
-                className="flex-1 group bg-[#f3eee5] border-2 border-[#251c1a] text-[#251c1a] py-4 px-6 rounded-xl flex items-center justify-between shadow-md hover:shadow-lg transition-all duration-300 transform hover:-translate-y-1"
-              >
-                <div className="flex items-center">
-                  <div className="bg-[#251c1a]/10 p-3 rounded-lg mr-3">
-                    <FaTachometerAlt className="text-xl" />
-                  </div>
-                  <div className="text-left">
-                    <h3 className="font-semibold text-lg">Dashboard</h3>
-                    <p className="text-[#251c1a]/70 text-sm">Access your legal workspace</p>
-                  </div>
+              {!currentUser && (
+                <div className="mt-4 text-center lg:text-left">
+                  <Link 
+                    to="/login"
+                    className="text-sm font-medium text-[#251c1a]/70 hover:text-[#251c1a] transition-colors duration-300"
+                  >
+                    Already have an account? <span className="underline">Sign in</span>
+                  </Link>
                 </div>
-                <FaArrowRight className="transform group-hover:translate-x-1 transition-transform" />
-              </Link>
-            </div>
+              )}
+            </motion.div>
           </div>
           
-          {/* Right side with balance scale (visible on all screens) */}
-          <div className="lg:col-span-6 flex justify-center items-center">
-            <div ref={balanceRef} className="relative w-[280px] h-[280px] sm:w-[380px] sm:h-[380px]">
+          {/* Right side with balance scale - shifted up */}
+          <div className="lg:col-span-6 flex justify-center items-center lg:mt-0 lg:translate-x-6 lg:translate-y-2">
+            <div ref={balanceRef} className="relative w-[280px] h-[280px] sm:w-[380px] sm:h-[380px] md:w-[440px] md:h-[440px]">
+              {/* Balance scale component contents remain unchanged */}
               {/* Background circle */}
-              <div className="absolute w-[250px] h-[250px] sm:w-[350px] sm:h-[350px] rounded-full border-8 border-[#251c1a]/10 top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2"></div>
+              <div className="absolute w-[250px] h-[250px] sm:w-[340px] sm:h-[340px] md:w-[400px] md:h-[400px] rounded-full border-8 border-[#251c1a]/10 top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2"></div>
               
               {/* Central pole */}
               <div className="absolute left-1/2 top-[15%] h-[70%] w-4 sm:w-6 bg-[#251c1a] rounded-t-full transform -translate-x-1/2">
@@ -122,11 +152,11 @@ function Hero() {
               </div>
               
               {/* The balance beam */}
-              <div className={`absolute top-[30%] left-1/2 w-[220px] sm:w-[320px] h-4 sm:h-6 bg-gradient-to-r from-[#251c1a] via-[#3a2e2b] to-[#251c1a] rounded-full transform -translate-x-1/2 origin-center transition-transform duration-1000 ${
+              <div className={`absolute top-[30%] left-1/2 w-[220px] sm:w-[320px] md:w-[360px] h-4 sm:h-6 bg-gradient-to-r from-[#251c1a] via-[#3a2e2b] to-[#251c1a] rounded-full transform -translate-x-1/2 origin-center transition-transform duration-1000 ${
                 isBalanced ? 'rotate-0' : 'rotate-[5deg]'
               }`}>
                 {/* Left scale plate */}
-                <div className={`absolute left-0 -bottom-[100px] sm:-bottom-[140px] w-[80px] h-[80px] sm:w-[120px] sm:h-[120px] rounded-full border-6 sm:border-8 border-[#251c1a] transition-transform duration-1000 ${
+                <div className={`absolute left-0 -bottom-[110px] sm:-bottom-[150px] w-[90px] h-[90px] sm:w-[130px] sm:h-[130px] rounded-full border-6 sm:border-8 border-[#251c1a] transition-transform duration-1000 ${
                   !isBalanced ? 'transform -translate-y-4' : ''
                 }`}>
                   <div className="absolute inset-0 rounded-full bg-[#251c1a]/5 backdrop-blur-sm"></div>
@@ -139,7 +169,7 @@ function Hero() {
                 </div>
                 
                 {/* Right scale plate */}
-                <div className={`absolute right-0 -bottom-[100px] sm:-bottom-[140px] w-[80px] h-[80px] sm:w-[120px] sm:h-[120px] rounded-full border-6 sm:border-8 border-[#251c1a] transition-transform duration-1000 ${
+                <div className={`absolute right-0 -bottom-[110px] sm:-bottom-[150px] w-[90px] h-[90px] sm:w-[130px] sm:h-[130px] rounded-full border-6 sm:border-8 border-[#251c1a] transition-transform duration-1000 ${
                   isBalanced ? 'transform -translate-y-4' : ''
                 }`}>
                   <div className="absolute inset-0 rounded-full bg-[#251c1a]/5 backdrop-blur-sm"></div>
@@ -153,28 +183,16 @@ function Hero() {
               </div>
               
               {/* Decorative patterns */}
-              <svg className="absolute top-0 right-0 w-16 h-16 sm:w-24 sm:h-24 text-[#251c1a]/10" viewBox="0 0 100 100">
+              <svg className="absolute top-0 right-0 w-18 h-18 sm:w-24 sm:h-24 text-[#251c1a]/10" viewBox="0 0 100 100">
                 <path fill="currentColor" d="M0,0 L100,0 L100,100 Z" />
               </svg>
-              <svg className="absolute bottom-0 left-0 w-16 h-16 sm:w-24 sm:h-24 text-[#251c1a]/10" viewBox="0 0 100 100">
+              <svg className="absolute bottom-0 left-0 w-18 h-18 sm:w-24 sm:h-24 text-[#251c1a]/10" viewBox="0 0 100 100">
                 <path fill="currentColor" d="M0,100 L0,0 L100,100 Z" />
               </svg>
             </div>
           </div>
         </div>
       </div>
-
-      {/* Custom CSS for animations */}
-      <style jsx>{`
-        @keyframes circle-animation {
-          0% { stroke-dashoffset: 339.3; }
-          100% { stroke-dashoffset: 37.3; }
-        }
-        
-        .circle-animation {
-          animation: circle-animation 2s ease-out forwards;
-        }
-      `}</style>
     </div>
   );
 }

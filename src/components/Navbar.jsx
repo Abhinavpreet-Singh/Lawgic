@@ -50,7 +50,7 @@ function Navbar() {
 
     // Navigation items
     const navItems = [
-        { name: 'Home', href: '/', icon: <FaGavel className="mr-2" /> },
+        { name: 'Home', href: '/',},
         { name: 'About', href: '/about', section: 'about' },
         { name: 'Services', href: '/services', section: 'services' },
         { name: 'FAQ', href: '/faq', section: 'faq' },
