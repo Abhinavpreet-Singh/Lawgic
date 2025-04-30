@@ -1,5 +1,6 @@
 import React, { useEffect, useState, useRef } from 'react';
-import { FaSearch, FaBalanceScale, FaGavel } from 'react-icons/fa';
+import { FaSearch, FaBalanceScale, FaGavel, FaRobot, FaTachometerAlt, FaArrowRight } from 'react-icons/fa';
+import { Link } from 'react-router-dom';
 
 function Hero() {
   const [isBalanced, setIsBalanced] = useState(true);
@@ -67,6 +68,41 @@ function Hero() {
             
             <div className="mt-4 text-[#251c1a]/60 text-sm">
               Try searching: "recent supreme court decisions" or "contract templates"
+            </div>
+
+            {/* Interactive Buttons */}
+            <div className="mt-10 flex flex-col sm:flex-row gap-4 w-full max-w-xl mx-auto">
+              <Link 
+                to="/chatbot"
+                className="flex-1 group bg-gradient-to-r from-[#251c1a] to-[#3a2e2b] text-[#f3eee5] py-4 px-6 rounded-xl flex items-center justify-between shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1"
+              >
+                <div className="flex items-center">
+                  <div className="bg-[#f3eee5]/20 p-3 rounded-lg mr-3">
+                    <FaRobot className="text-xl" />
+                  </div>
+                  <div className="text-left">
+                    <h3 className="font-semibold text-lg">Lawgic AI</h3>
+                    <p className="text-[#f3eee5]/70 text-sm">Chat with our legal assistant</p>
+                  </div>
+                </div>
+                <FaArrowRight className="transform group-hover:translate-x-1 transition-transform" />
+              </Link>
+              
+              <Link 
+                to="/dashboard"
+                className="flex-1 group bg-[#f3eee5] border-2 border-[#251c1a] text-[#251c1a] py-4 px-6 rounded-xl flex items-center justify-between shadow-md hover:shadow-lg transition-all duration-300 transform hover:-translate-y-1"
+              >
+                <div className="flex items-center">
+                  <div className="bg-[#251c1a]/10 p-3 rounded-lg mr-3">
+                    <FaTachometerAlt className="text-xl" />
+                  </div>
+                  <div className="text-left">
+                    <h3 className="font-semibold text-lg">Dashboard</h3>
+                    <p className="text-[#251c1a]/70 text-sm">Access your legal workspace</p>
+                  </div>
+                </div>
+                <FaArrowRight className="transform group-hover:translate-x-1 transition-transform" />
+              </Link>
             </div>
           </div>
           

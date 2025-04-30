@@ -8,4 +8,8 @@ export default defineConfig({
     tailwindcss({
     }),
   ],
+  server: {
+    port: 3000, // Changed port from default 5173 to 3000
+    open: true, // Auto-opens browser when starting dev server
+  },
 })
