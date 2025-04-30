@@ -3,6 +3,7 @@ import {
   loginWithEmailAndPassword, 
   registerWithEmailAndPassword, 
   signInWithGoogle, 
+  signInWithGithub,
   logoutUser, 
   resetPassword,
   onAuthStateChange
@@ -71,6 +72,18 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
+  // Sign in with GitHub
+  const loginWithGithub = async () => {
+    try {
+      const user = await signInWithGithub();
+      const profile = await getUserProfile(user.uid);
+      setUserProfile(profile);
+      return user;
+    } catch (error) {
+      throw error;
+    }
+  };
+
   // Logout user
   const logout = async () => {
     try {
@@ -100,6 +113,7 @@ export const AuthProvider = ({ children }) => {
     login,
     register,
     loginWithGoogle,
+    loginWithGithub,
     logout,
     forgotPassword
   };

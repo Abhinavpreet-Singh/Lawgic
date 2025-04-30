@@ -5,6 +5,7 @@ import {
   sendPasswordResetEmail,
   updateProfile,
   GoogleAuthProvider,
+  GithubAuthProvider,
   signInWithPopup,
   onAuthStateChanged
 } from 'firebase/auth';
@@ -25,7 +26,8 @@ export const registerWithEmailAndPassword = async (email, password, displayName)
       displayName,
       email: user.email,
       createdAt: new Date().toISOString(),
-      accountType: 'email'
+      accountType: 'email',
+      fullName: displayName
     });
     
     return user;
@@ -59,12 +61,37 @@ export const signInWithGoogle = async () => {
       email: user.email,
       photoURL: user.photoURL,
       createdAt: new Date().toISOString(),
-      accountType: 'google'
+      accountType: 'google',
+      fullName: user.displayName
     });
     
     return user;
   } catch (error) {
     console.error('Error signing in with Google:', error);
+    throw error;
+  }
+};
+
+// Sign in with GitHub
+export const signInWithGithub = async () => {
+  try {
+    const provider = new GithubAuthProvider();
+    const userCredential = await signInWithPopup(auth, provider);
+    const user = userCredential.user;
+    
+    // Create or update user profile in Firestore
+    await saveUserProfile(user.uid, { 
+      displayName: user.displayName || user.email.split('@')[0],
+      email: user.email,
+      photoURL: user.photoURL,
+      createdAt: new Date().toISOString(),
+      accountType: 'github',
+      fullName: user.displayName || user.email.split('@')[0]
+    });
+    
+    return user;
+  } catch (error) {
+    console.error('Error signing in with GitHub:', error);
     throw error;
   }
 };

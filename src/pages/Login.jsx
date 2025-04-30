@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { FaLock, FaEnvelope, FaGoogle, FaExclamationCircle } from 'react-icons/fa';
+import { FaLock, FaEnvelope, FaGoogle, FaGithub, FaExclamationCircle } from 'react-icons/fa';
 import { useAuth } from '../context/AuthContext';
 
 const Login = () => {
@@ -8,7 +8,7 @@ const Login = () => {
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
-  const { login, loginWithGoogle, forgotPassword } = useAuth();
+  const { login, loginWithGoogle, loginWithGithub, forgotPassword } = useAuth();
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
@@ -39,6 +39,19 @@ const Login = () => {
       navigate('/dashboard');
     } catch (error) {
       console.error('Google sign-in error:', error);
+      setError(getAuthErrorMessage(error.code));
+    } finally {
+      setLoading(false);
+    }
+  };
+  
+  const handleGithubSignIn = async () => {
+    try {
+      setLoading(true);
+      await loginWithGithub();
+      navigate('/dashboard');
+    } catch (error) {
+      console.error('GitHub sign-in error:', error);
       setError(getAuthErrorMessage(error.code));
     } finally {
       setLoading(false);
@@ -166,7 +179,7 @@ const Login = () => {
             </div>
           </div>
 
-          <div className="mt-6">
+          <div className="mt-6 grid grid-cols-2 gap-3">
             <button
               type="button"
               onClick={handleGoogleSignIn}
@@ -175,6 +188,15 @@ const Login = () => {
             >
               <FaGoogle className="mr-2" />
               Google
+            </button>
+            <button
+              type="button"
+              onClick={handleGithubSignIn}
+              disabled={loading}
+              className="w-full flex justify-center items-center py-3 px-4 rounded-lg border border-[#251c1a]/10 bg-white text-[#251c1a] font-medium hover:bg-[#f3eee5]/30 focus:outline-none focus:ring-2 focus:ring-[#251c1a]/30 transition-colors"
+            >
+              <FaGithub className="mr-2" />
+              GitHub
             </button>
           </div>
         </div>

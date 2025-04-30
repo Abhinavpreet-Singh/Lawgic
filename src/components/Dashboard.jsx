@@ -3,9 +3,8 @@ import { Link } from 'react-router-dom';
 import { 
   FaArrowLeft, FaSearch, FaFolder, FaFileAlt, FaStar, FaClock,
   FaChartBar, FaPlus, FaUserTie, FaBell, FaEllipsisH, FaRegCalendarAlt,
-  FaBalanceScale, FaPencilAlt, FaTrash, FaRegCheckCircle
+  FaBalanceScale, FaPencilAlt, FaTrash, FaRegCheckCircle, FaRobot
 } from 'react-icons/fa';
-0
 
 const Dashboard = () => {
   const [activeTab, setActiveTab] = useState('recent');
