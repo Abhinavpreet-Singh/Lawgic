@@ -50,11 +50,11 @@ function Navbar() {
 
     // Navigation items
     const navItems = [
-        { name: 'Home', href: '/#home', icon: <FaGavel className="mr-2" /> },
-        { name: 'About', href: '/#about' },
-        { name: 'Services', href: '/#services' },
-        { name: 'FAQ', href: '/#faq' },
-        { name: 'Contact', href: '/#contact' }
+        { name: 'Home', href: '/', icon: <FaGavel className="mr-2" /> },
+        { name: 'About', href: '/about', section: 'about' },
+        { name: 'Services', href: '/services', section: 'services' },
+        { name: 'FAQ', href: '/faq', section: 'faq' },
+        { name: 'Contact', href: '/contact', section: 'contact' }
     ];
 
     // Special nav items for quick access
@@ -65,23 +65,28 @@ function Navbar() {
         ] : [])
     ];
 
-    const handleNavClick = (href) => {
-        if (href.startsWith('/#')) {
-            // For hash links on the home page
-            const element = document.querySelector(href.substring(1));
-            if (element && location.pathname === '/') {
+    // Determine if we're on a page that should show the full navbar
+    const isHomePage = location.pathname === '/';
+    const isAuthPage = location.pathname === '/login' || location.pathname === '/signup';
+
+    // Handle navigation link clicks with smooth scrolling
+    const handleNavClick = (href, section) => {
+        if (location.pathname === '/' && section) {
+            // On homepage, scroll to the section
+            const element = document.getElementById(section);
+            if (element) {
                 element.scrollIntoView({ behavior: 'smooth' });
-                setMobileMenuOpen(false);
-            } else {
-                // If we're not on the home page, navigate home first
-                // The hash will be processed after navigation
             }
+        } else if (section) {
+            // If not on homepage but clicking a section link, navigate to homepage then scroll
+            // We'll use the section as a query param which we'll handle on the homepage
+            window.location.href = `/?section=${section}`;
+        } else {
+            // Regular navigation
+            // Let React Router handle regular navigation
         }
         setMobileMenuOpen(false);
     };
-
-    // Determine if we're on a page that should show the full navbar
-    const isHomePage = location.pathname === '/';
 
     return (
         <header 
@@ -114,7 +119,20 @@ function Navbar() {
                                 className={`text-2xl font-bold transition-all duration-300 flex items-center ${
                                     scrolled || !isHomePage ? 'text-[#f3eee5]' : 'text-[#251c1a]'
                                 }`}
-                                onClick={() => setMobileMenuOpen(false)}
+                                onClick={(e) => {
+                                    e.preventDefault();
+                                    // If already on homepage, just scroll to top smoothly
+                                    if (location.pathname === '/') {
+                                        window.scrollTo({
+                                            top: 0,
+                                            behavior: 'smooth'
+                                        });
+                                    } else {
+                                        // Otherwise navigate to homepage
+                                        window.location.href = '/';
+                                    }
+                                    setMobileMenuOpen(false);
+                                }}
                             >
                                 <div className="flex items-center gap-2">
                                     <div className={`w-10 h-10 rounded-full transform transition-all duration-500 ${
@@ -144,7 +162,19 @@ function Navbar() {
                                         to={item.href} 
                                         onClick={(e) => {
                                             e.preventDefault();
-                                            handleNavClick(item.href);
+                                            if (item.name === 'Home') {
+                                                // If Home is clicked, go to top of homepage
+                                                if (location.pathname === '/') {
+                                                    window.scrollTo({
+                                                        top: 0,
+                                                        behavior: 'smooth'
+                                                    });
+                                                } else {
+                                                    window.location.href = '/';
+                                                }
+                                            } else {
+                                                handleNavClick(item.href, item.section);
+                                            }
                                         }}
                                         className={`py-2 px-2 lg:px-3 rounded-md transition-all duration-300 flex items-center ${
                                             scrolled || !isHomePage 
@@ -270,8 +300,8 @@ function Navbar() {
                     mobileMenuOpen ? 'max-h-screen' : 'max-h-0'
                 }`}
                 style={{
-                    top: !isHomePage ? '56px' : scrolled ? `${60 + navbarTransform}px` : '80px',
-                    width: isHomePage ? `${navbarWidth}%` : '100%',
+                    top: !isHomePage || isAuthPage ? '56px' : scrolled ? `${60 + navbarTransform}px` : '80px',
+                    width: isHomePage && !isAuthPage ? `${navbarWidth}%` : '100%',
                     marginLeft: 'auto',
                     marginRight: 'auto',
                     borderRadius: '0 0 25px 25px',
@@ -348,7 +378,20 @@ function Navbar() {
                                     to={item.href} 
                                     onClick={(e) => {
                                         e.preventDefault();
-                                        handleNavClick(item.href);
+                                        if (item.name === 'Home') {
+                                            // If Home is clicked, go to top of homepage
+                                            if (location.pathname === '/') {
+                                                window.scrollTo({
+                                                    top: 0,
+                                                    behavior: 'smooth'
+                                                });
+                                                setMobileMenuOpen(false);
+                                            } else {
+                                                window.location.href = '/';
+                                            }
+                                        } else {
+                                            handleNavClick(item.href, item.section);
+                                        }
                                     }}
                                     className="flex items-center px-6 py-4 hover:bg-[#f3eee5]/10 transition-colors"
                                 >

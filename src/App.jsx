@@ -39,28 +39,48 @@ const ProtectedRoute = ({ children }) => {
 };
 
 // Homepage component that combines all homepage sections
-const Homepage = () => (
-  <>
-    <div id="home">
-      <Hero />
-    </div>
-    <div id="about">
-      <About />
-    </div>
-    <div id="services">
-      <Services />
-    </div>
-    <div id="testimonials">
-      <Testimonials />
-    </div>
-    <div id="faq">
-      <FAQ />
-    </div>
-    <div id="contact">
-      <Footer />
-    </div>
-  </>
-);
+const Homepage = () => {
+  // Add useEffect to handle scrolling when page loads with a query param
+  React.useEffect(() => {
+    // Check for section query param (for navigation from other pages)
+    const queryParams = new URLSearchParams(window.location.search);
+    const section = queryParams.get('section');
+    
+    if (section) {
+      const element = document.getElementById(section);
+      if (element) {
+        setTimeout(() => {
+          element.scrollIntoView({ behavior: 'smooth' });
+          // Clean up the URL after scrolling
+          window.history.replaceState({}, document.title, '/');
+        }, 300);
+      }
+    }
+  }, []);
+  
+  return (
+    <>
+      <section id="home" className="section-home">
+        <Hero />
+      </section>
+      <section id="about" className="section-about">
+        <About />
+      </section>
+      <section id="services" className="section-services">
+        <Services />
+      </section>
+      <section id="testimonials" className="section-testimonials">
+        <Testimonials />
+      </section>
+      <section id="faq" className="section-faq">
+        <FAQ />
+      </section>
+      <section id="contact" className="section-contact">
+        <Footer />
+      </section>
+    </>
+  );
+};
 
 function AppRoutes() {
   const { currentUser } = useAuth();
