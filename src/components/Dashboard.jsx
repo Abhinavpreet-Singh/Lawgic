@@ -83,9 +83,14 @@ const Dashboard = () => {
                       <span className="bg-[#c8a27c]/20 text-[#251c1a] text-xs px-2 py-1 rounded mr-2">Documents</span>
                       <span className="bg-[#c8a27c]/20 text-[#251c1a] text-xs px-2 py-1 rounded">Analysis</span>
                     </div>
-                    <button className="w-full bg-[#251c1a] text-[#f3eee5] py-2 px-4 rounded-lg hover:bg-[#3b2a25] transition-colors text-sm">
+                    <a 
+                      href="https://lawgic-case-doc-reader.onrender.com/" 
+                      target="_blank" 
+                      rel="noopener noreferrer" 
+                      className="block w-full bg-[#251c1a] text-[#f3eee5] py-2 px-4 rounded-lg hover:bg-[#3b2a25] transition-colors text-sm text-center"
+                    >
                       Launch Assistant
-                    </button>
+                    </a>
                   </div>
                 </div>
 
