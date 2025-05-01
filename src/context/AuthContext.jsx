@@ -9,6 +9,7 @@ import {
   onAuthStateChange
 } from '../../firebase/authService';
 import { getUserProfile } from '../../firebase/profileService';
+import Loader from '../components/Loader';
 
 // Create context
 const AuthContext = createContext();
@@ -120,7 +121,7 @@ export const AuthProvider = ({ children }) => {
 
   return (
     <AuthContext.Provider value={value}>
-      {!loading && children}
+      {loading ? <Loader /> : children}
     </AuthContext.Provider>
   );
 };

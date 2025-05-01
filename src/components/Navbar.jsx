@@ -1,14 +1,17 @@
-import React, { useState, useEffect } from 'react';
-import { FaGavel, FaSearch, FaBars, FaTimes, FaUser, FaRobot, FaTachometerAlt, FaSignOutAlt } from 'react-icons/fa';
-import { Link, useLocation } from 'react-router-dom';
+import React, { useState, useEffect, useRef } from 'react';
+import { FaGavel, FaSearch, FaBars, FaTimes, FaUser, FaRobot, FaTachometerAlt, FaSignOutAlt, FaUserEdit } from 'react-icons/fa';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 
 function Navbar() {
     const [scrollPosition, setScrollPosition] = useState(0);
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+    const [showProfileDropdown, setShowProfileDropdown] = useState(false);
     const [navbarWidth, setNavbarWidth] = useState(100);
     const [navbarTransform, setNavbarTransform] = useState(0);
     const location = useLocation();
+    const navigate = useNavigate();
+    const profileDropdownRef = useRef(null);
     const { currentUser, userProfile, logout } = useAuth();
 
     // Handle scroll effect with more granular control
@@ -33,9 +36,25 @@ function Navbar() {
         return () => window.removeEventListener('scroll', handleScroll);
     }, []);
 
+    // Close profile dropdown when clicking outside
+    useEffect(() => {
+        const handleClickOutside = (e) => {
+            if (profileDropdownRef.current && !profileDropdownRef.current.contains(e.target)) {
+                setShowProfileDropdown(false);
+            }
+        };
+
+        document.addEventListener('mousedown', handleClickOutside);
+        return () => {
+            document.removeEventListener('mousedown', handleClickOutside);
+        };
+    }, []);
+
     const handleLogout = async () => {
         try {
             await logout();
+            setShowProfileDropdown(false);
+            navigate('/');
         } catch (error) {
             console.error("Logout error:", error);
         }
@@ -59,7 +78,6 @@ function Navbar() {
 
     // Special nav items for quick access
     const specialNavItems = [
-        { name: 'Chat with AI', href: '/chatbot', icon: <FaRobot className="mr-2" /> },
         ...(currentUser ? [
             { name: 'Dashboard', href: '/dashboard', icon: <FaTachometerAlt className="mr-2" /> }
         ] : [])
@@ -216,39 +234,69 @@ function Navbar() {
                         {/* Auth Navigation */}
                         <div className="hidden md:flex items-center">
                             {currentUser ? (
-                                <div className="flex items-center space-x-2">
+                                <div className="relative" ref={profileDropdownRef}>
                                     <button
-                                        onClick={handleLogout}
-                                        className={`py-1.5 px-3 rounded-md flex items-center transition-all duration-300 ${
+                                        onClick={() => setShowProfileDropdown(!showProfileDropdown)}
+                                        className={`flex items-center space-x-2 py-1.5 px-2 rounded-full transition-all duration-300 ${
                                             scrolled || !isHomePage 
                                                 ? 'text-[#f3eee5] hover:bg-[#f3eee5]/10' 
                                                 : 'text-[#251c1a] hover:bg-[#251c1a]/10'
                                         }`}
                                     >
-                                        <FaSignOutAlt className="mr-2" />
-                                        <span>Logout</span>
-                                    </button>
-
-                                    <Link
-                                        to="/dashboard"
-                                        className={`flex items-center justify-center rounded-full transition-all duration-300 ${
-                                            scrolled || !isHomePage 
-                                                ? 'text-[#f3eee5] hover:bg-[#f3eee5]/20' 
-                                                : 'text-[#251c1a] hover:bg-[#251c1a]/10'
-                                        }`}
-                                    >
-                                        <div className="h-8 w-8 rounded-full bg-[#f3eee5]/20 flex items-center justify-center font-medium">
-                                            {userProfile?.photoURL ? (
+                                        <div className="h-8 w-8 rounded-full bg-[#f3eee5]/20 flex items-center justify-center overflow-hidden">
+                                            {currentUser.photoURL ? (
                                                 <img 
-                                                    src={userProfile.photoURL} 
+                                                    src={currentUser.photoURL} 
                                                     alt="Profile" 
-                                                    className="h-8 w-8 rounded-full object-cover" 
+                                                    className="h-full w-full object-cover"
                                                 />
                                             ) : (
-                                                <span>{userProfile?.displayName?.charAt(0) || <FaUser />}</span>
+                                                <span className={`text-sm font-medium ${scrolled || !isHomePage ? 'text-[#f3eee5]' : 'text-[#251c1a]'}`}>
+                                                    {currentUser.displayName?.charAt(0) || <FaUser className="text-sm" />}
+                                                </span>
                                             )}
                                         </div>
-                                    </Link>
+                                        <span className="hidden lg:block text-sm font-medium">
+                                            {currentUser.displayName || "Profile"}
+                                        </span>
+                                    </button>
+                                    
+                                    {showProfileDropdown && (
+                                        <div className="absolute right-0 mt-2 w-56 bg-white rounded-lg shadow-xl py-2 z-50">
+                                            <div className="px-4 py-3 border-b border-gray-100">
+                                                <p className="font-semibold text-[#251c1a]">{currentUser.displayName || "User"}</p>
+                                                <p className="text-xs text-[#251c1a]/60 truncate mt-0.5">{currentUser.email}</p>
+                                            </div>
+                                            
+                                            <Link 
+                                                to="/profile"
+                                                onClick={() => setShowProfileDropdown(false)}
+                                                className="flex items-center px-4 py-2.5 hover:bg-[#251c1a]/5 transition-colors"
+                                            >
+                                                <FaUserEdit className="text-[#251c1a]/70 mr-3" />
+                                                <span className="text-sm text-[#251c1a]">Profile Settings</span>
+                                            </Link>
+                                            
+                                            <Link 
+                                                to="/dashboard"
+                                                onClick={() => setShowProfileDropdown(false)}
+                                                className="flex items-center px-4 py-2.5 hover:bg-[#251c1a]/5 transition-colors"
+                                            >
+                                                <FaTachometerAlt className="text-[#251c1a]/70 mr-3" />
+                                                <span className="text-sm text-[#251c1a]">Dashboard</span>
+                                            </Link>
+                                            
+                                            <div className="border-t border-gray-100 my-1"></div>
+                                            
+                                            <button 
+                                                onClick={handleLogout}
+                                                className="flex items-center w-full text-left px-4 py-2.5 text-red-600 hover:bg-red-50 transition-colors"
+                                            >
+                                                <FaSignOutAlt className="mr-3" />
+                                                <span className="text-sm">Sign Out</span>
+                                            </button>
+                                        </div>
+                                    )}
                                 </div>
                             ) : (
                                 <div className="flex items-center space-x-2">
@@ -278,9 +326,31 @@ function Navbar() {
 
                         {/* Mobile Menu Toggle */}
                         <div className="md:hidden flex items-center">
+                            {currentUser && (
+                                <Link 
+                                    to="/profile" 
+                                    className="mr-2"
+                                    aria-label="Profile"
+                                >
+                                    <div className="h-8 w-8 rounded-full bg-[#f3eee5]/20 flex items-center justify-center overflow-hidden">
+                                        {currentUser.photoURL ? (
+                                            <img 
+                                                src={currentUser.photoURL} 
+                                                alt="Profile" 
+                                                className="h-full w-full object-cover"
+                                            />
+                                        ) : (
+                                            <span className={`text-sm font-medium ${scrolled || !isHomePage ? 'text-[#f3eee5]' : 'text-[#251c1a]'}`}>
+                                                {currentUser.displayName?.charAt(0) || <FaUser className="text-sm" />}
+                                            </span>
+                                        )}
+                                    </div>
+                                </Link>
+                            )}
+                            
                             <button 
                                 onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-                                className={`p-2 rounded-full transition-all duration-300 ${
+                                className={`p-2.5 rounded-full transition-all duration-300 ${
                                     scrolled || !isHomePage 
                                         ? 'text-[#f3eee5] hover:bg-[#f3eee5]/20' 
                                         : 'text-[#251c1a] hover:bg-[#251c1a]/10'
@@ -294,17 +364,21 @@ function Navbar() {
                 </div>
             </div>
 
-            {/* Mobile Menu */}
+            {/* Mobile Menu - Returning to previous design with improved spacing */}
             <div 
                 className={`md:hidden fixed left-0 right-0 transition-all duration-500 overflow-hidden ${
                     mobileMenuOpen ? 'max-h-screen' : 'max-h-0'
                 }`}
                 style={{
-                    top: !isHomePage || isAuthPage ? '56px' : scrolled ? `${60 + navbarTransform}px` : '80px',
+                    top: !isHomePage || isAuthPage 
+                        ? '70px' // Increased space between navbar and content for mobile
+                        : scrolled 
+                            ? `${75 + navbarTransform}px` 
+                            : '95px',
                     width: isHomePage && !isAuthPage ? `${navbarWidth}%` : '100%',
                     marginLeft: 'auto',
                     marginRight: 'auto',
-                    borderRadius: '0 0 25px 25px',
+                    borderRadius: '0 0 28px 28px',
                     background: `linear-gradient(to right, rgba(37, 28, 26, 0.97), rgba(58, 45, 42, 0.97))`,
                     backdropFilter: 'blur(10px)',
                     boxShadow: mobileMenuOpen ? '0 8px 16px rgba(0, 0, 0, 0.15)' : 'none',
@@ -339,30 +413,51 @@ function Navbar() {
                             </>
                         ) : (
                             <li>
-                                <div className="px-6 py-4 flex items-center justify-between">
-                                    <div className="flex items-center">
-                                        <div className="h-10 w-10 rounded-full bg-[#f3eee5]/20 flex items-center justify-center mr-3 flex-shrink-0">
-                                            {userProfile?.photoURL ? (
-                                                <img 
-                                                    src={userProfile.photoURL} 
-                                                    alt="Profile" 
-                                                    className="h-10 w-10 rounded-full object-cover" 
-                                                />
-                                            ) : (
-                                                <span className="text-lg">{userProfile?.displayName?.charAt(0) || <FaUser />}</span>
-                                            )}
+                                <div className="px-6 py-4">
+                                    <div className="flex items-center justify-between mb-3">
+                                        <div className="flex items-center">
+                                            <div className="h-10 w-10 rounded-full bg-[#f3eee5]/20 flex items-center justify-center mr-3 flex-shrink-0 overflow-hidden border border-[#f3eee5]/30">
+                                                {currentUser.photoURL ? (
+                                                    <img 
+                                                        src={currentUser.photoURL} 
+                                                        alt="Profile" 
+                                                        className="h-10 w-10 rounded-full object-cover" 
+                                                    />
+                                                ) : (
+                                                    <span className="text-lg font-medium">{currentUser.displayName?.charAt(0) || <FaUser className="text-sm" />}</span>
+                                                )}
+                                            </div>
+                                            <div>
+                                                <p className="font-medium">{currentUser.displayName || "User"}</p>
+                                                <p className="text-xs text-[#f3eee5]/60 truncate max-w-[150px]">{currentUser.email}</p>
+                                            </div>
                                         </div>
-                                        <div>
-                                            <p className="font-medium">{userProfile?.displayName || "User"}</p>
-                                            <p className="text-xs text-[#f3eee5]/60">{userProfile?.email}</p>
-                                        </div>
+                                        <button 
+                                            onClick={handleLogout}
+                                            className="p-2 rounded-md hover:bg-[#f3eee5]/10 transition-colors"
+                                            aria-label="Sign Out"
+                                        >
+                                            <FaSignOutAlt className="text-[#f3eee5]/70" />
+                                        </button>
                                     </div>
-                                    <button 
-                                        onClick={handleLogout}
-                                        className="p-2 rounded-md hover:bg-[#f3eee5]/10 transition-colors"
-                                    >
-                                        <FaSignOutAlt />
-                                    </button>
+                                    <div className="flex space-x-2">
+                                        <Link 
+                                            to="/profile" 
+                                            onClick={() => setMobileMenuOpen(false)}
+                                            className="flex flex-1 items-center justify-center py-2 px-3 bg-[#f3eee5]/10 hover:bg-[#f3eee5]/15 rounded-md transition-colors text-sm"
+                                        >
+                                            <FaUserEdit className="mr-2" />
+                                            Profile Settings
+                                        </Link>
+                                        <Link 
+                                            to="/dashboard" 
+                                            onClick={() => setMobileMenuOpen(false)}
+                                            className="flex flex-1 items-center justify-center py-2 px-3 bg-[#f3eee5]/10 hover:bg-[#f3eee5]/15 rounded-md transition-colors text-sm"
+                                        >
+                                            <FaTachometerAlt className="mr-2" />
+                                            Dashboard
+                                        </Link>
+                                    </div>
                                 </div>
                             </li>
                         )}

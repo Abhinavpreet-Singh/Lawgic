@@ -1,5 +1,7 @@
-import { db } from './config';
+import { db, storage } from './config';
 import { doc, getDoc, setDoc, updateDoc } from 'firebase/firestore';
+import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
+import { updateProfile } from 'firebase/auth';
 
 const userProfilesCollection = 'userProfiles';
 
@@ -51,6 +53,62 @@ export const getUserProfile = async (userId) => {
     }
   } catch (error) {
     console.error('Error getting user profile:', error);
+    throw error;
+  }
+};
+
+// Upload a profile image
+export const uploadProfileImage = async (userId, file) => {
+  try {
+    // Create a storage reference
+    const storageRef = ref(storage, `profile_images/${userId}`);
+    
+    // Upload the file
+    const snapshot = await uploadBytes(storageRef, file);
+    
+    // Get the download URL
+    const downloadURL = await getDownloadURL(snapshot.ref);
+    
+    // Update the user profile with the new image URL
+    await saveUserProfile(userId, { photoURL: downloadURL, updatedAt: new Date().toISOString() });
+    
+    return downloadURL;
+  } catch (error) {
+    console.error('Error uploading profile image:', error);
+    throw error;
+  }
+};
+
+// Update user display name
+export const updateUserDisplayName = async (user, displayName) => {
+  try {
+    // Update in auth
+    await updateProfile(user, { displayName });
+    
+    // Update in profile
+    await saveUserProfile(user.uid, { 
+      displayName, 
+      updatedAt: new Date().toISOString() 
+    });
+    
+    return true;
+  } catch (error) {
+    console.error('Error updating display name:', error);
+    throw error;
+  }
+};
+
+// Update user profile photo
+export const updateUserProfilePhoto = async (user, photoURL) => {
+  try {
+    // Update in auth
+    await updateProfile(user, { photoURL });
+    
+    // Update in profile is handled by uploadProfileImage
+    
+    return true;
+  } catch (error) {
+    console.error('Error updating profile photo:', error);
     throw error;
   }
 };

@@ -6,6 +6,7 @@ import Navbar from './components/Navbar'
 import Footer from './components/Footer'
 import Chatbot from './components/Chatbot'
 import Dashboard from './components/Dashboard'
+import Loader from './components/Loader'
 
 // Homepage components
 import Hero from './components/Homepage/Hero'
@@ -17,6 +18,7 @@ import Testimonials from './components/Homepage/Testimonials'
 // Auth pages
 import Login from './pages/Login'
 import Signup from './pages/Signup'
+import Profile from './pages/Profile'
 import { AuthProvider, useAuth } from './context/AuthContext'
 
 // Protected route component
@@ -24,11 +26,7 @@ const ProtectedRoute = ({ children }) => {
   const { currentUser, loading } = useAuth();
   
   if (loading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-[#f3eee5]">
-        <div className="animate-spin rounded-full h-16 w-16 border-t-4 border-b-4 border-[#251c1a]"></div>
-      </div>
-    );
+    return <Loader />;
   }
   
   if (!currentUser) {
@@ -115,6 +113,13 @@ function AppRoutes() {
         <ProtectedRoute>
           <Navbar />
           <Dashboard />
+        </ProtectedRoute>
+      } />
+      
+      <Route path="/profile" element={
+        <ProtectedRoute>
+          <Navbar />
+          <Profile />
         </ProtectedRoute>
       } />
       
