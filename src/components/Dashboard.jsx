@@ -1,96 +1,14 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { 
-  FaArrowLeft, FaSearch, FaFolder, FaFileAlt, FaStar, FaClock,
-  FaChartBar, FaPlus, FaUserTie, FaBell, FaEllipsisH, FaRegCalendarAlt,
-  FaBalanceScale, FaPencilAlt, FaTrash, FaRegCheckCircle, FaRobot
+  FaArrowLeft, FaBell, FaExternalLinkAlt, 
+  FaRegFileAlt, FaGavel, FaNewspaper,
+  FaBalanceScale, FaChevronDown
 } from 'react-icons/fa';
 
 const Dashboard = () => {
-  const [activeTab, setActiveTab] = useState('recent');
+  const [showMoreNews, setShowMoreNews] = useState(false);
   
-  const caseFiles = [
-    {
-      id: 1,
-      title: "Sharma vs. Mehta Property Dispute",
-      type: "Property Law",
-      modified: "Today",
-      star: true,
-      status: "In Progress"
-    },
-    {
-      id: 2,
-      title: "IndiTech Contract Review",
-      type: "Contract Law",
-      modified: "Yesterday",
-      star: false,
-      status: "Completed"
-    },
-    {
-      id: 3,
-      title: "Kumar Intellectual Property Case",
-      type: "IP Law",
-      modified: "Apr 27, 2025",
-      star: true,
-      status: "In Progress"
-    },
-    {
-      id: 4,
-      title: "Singh Family Trust",
-      type: "Trust Law",
-      modified: "Apr 25, 2025",
-      star: false,
-      status: "Review"
-    },
-    {
-      id: 5,
-      title: "Patel Corporate Compliance Analysis",
-      type: "Corporate Law",
-      modified: "Apr 21, 2025",
-      star: false,
-      status: "Completed"
-    }
-  ];
-  
-  const recentSearches = [
-    "Supreme Court judgments on right to privacy 2025",
-    "Specific performance of contracts case law",
-    "Digital evidence admissibility in Indian courts",
-    "Corporate tax restructuring legal framework",
-    "Intellectual property in AI generated content"
-  ];
-  
-  const upcomingEvents = [
-    {
-      title: "Case Review: Sharma vs. Mehta",
-      date: "Today, 14:30",
-      type: "Meeting"
-    },
-    {
-      title: "Contract Draft Deadline",
-      date: "Tomorrow, 18:00",
-      type: "Deadline"
-    },
-    {
-      title: "Legal Tech Conference",
-      date: "May 3, 2025",
-      type: "Event"
-    }
-  ];
-
-  const renderStatusBadge = (status) => {
-    switch(status) {
-      case 'In Progress':
-        return <span className="px-2 py-1 bg-blue-100 text-blue-700 rounded text-xs">In Progress</span>;
-      case 'Completed':
-        return <span className="px-2 py-1 bg-green-100 text-green-700 rounded text-xs">Completed</span>;
-      case 'Review':
-        return <span className="px-2 py-1 bg-yellow-100 text-yellow-700 rounded text-xs">Review</span>;
-      default:
-        return null;
-    }
-  };
-
   return (
     <div className="min-h-screen bg-[#f3eee5]">
       {/* Header */}
@@ -101,245 +19,212 @@ const Dashboard = () => {
               <Link to="/" className="mr-4 hover:opacity-80 transition-opacity">
                 <FaArrowLeft />
               </Link>
-              <h1 className="text-xl font-bold">Legal Dashboard</h1>
+              <h1 className="text-xl font-bold">Lawgic Dashboard</h1>
             </div>
             
             <div className="flex items-center space-x-3">
               <div className="relative">
                 <FaBell className="text-[#f3eee5]/70 hover:text-[#f3eee5] transition-colors cursor-pointer" />
-                <div className="absolute top-0 right-0 w-2 h-2 bg-red-500 rounded-full"></div>
+                <div className="absolute top-0 right-0 w-2 h-2 bg-[#c8a27c] rounded-full"></div>
               </div>
               
-              <div className="h-8 w-8 rounded-full bg-[#f3eee5]/20 flex items-center justify-center font-medium">
+              <div className="h-8 w-8 rounded-full bg-[#c8a27c] flex items-center justify-center font-medium">
                 RP
               </div>
             </div>
           </div>
-
-          {/* Search */}
-          <div className="mt-4 relative">
-            <input
-              type="text"
-              placeholder="Search cases, documents, legal codes..."
-              className="w-full bg-[#f3eee5]/10 border border-[#f3eee5]/20 rounded-full py-2 pl-10 pr-4 text-[#f3eee5] placeholder-[#f3eee5]/50 focus:outline-none focus:ring-2 focus:ring-[#f3eee5]/30"
-            />
-            <FaSearch className="absolute left-3 top-1/2 transform -translate-y-1/2 text-[#f3eee5]/50" />
-          </div>
-          
-          {/* Navigation */}
-          <nav className="flex mt-6 border-b border-[#f3eee5]/10">
-            <button 
-              onClick={() => setActiveTab('recent')}
-              className={`px-4 py-2 font-medium text-sm relative ${
-                activeTab === 'recent' ? 'text-[#f3eee5]' : 'text-[#f3eee5]/60 hover:text-[#f3eee5]/90'
-              }`}
-            >
-              Recent
-              {activeTab === 'recent' && (
-                <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-[#f3eee5]"></div>
-              )}
-            </button>
-            <button 
-              onClick={() => setActiveTab('documents')}
-              className={`px-4 py-2 font-medium text-sm relative ${
-                activeTab === 'documents' ? 'text-[#f3eee5]' : 'text-[#f3eee5]/60 hover:text-[#f3eee5]/90'
-              }`}
-            >
-              Documents
-              {activeTab === 'documents' && (
-                <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-[#f3eee5]"></div>
-              )}
-            </button>
-            <button 
-              onClick={() => setActiveTab('analytics')}
-              className={`px-4 py-2 font-medium text-sm relative ${
-                activeTab === 'analytics' ? 'text-[#f3eee5]' : 'text-[#f3eee5]/60 hover:text-[#f3eee5]/90'
-              }`}
-            >
-              Analytics
-              {activeTab === 'analytics' && (
-                <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-[#f3eee5]"></div>
-              )}
-            </button>
-            <button 
-              onClick={() => setActiveTab('clients')}
-              className={`px-4 py-2 font-medium text-sm relative ${
-                activeTab === 'clients' ? 'text-[#f3eee5]' : 'text-[#f3eee5]/60 hover:text-[#f3eee5]/90'
-              }`}
-            >
-              Clients
-              {activeTab === 'clients' && (
-                <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-[#f3eee5]"></div>
-              )}
-            </button>
-          </nav>
         </div>
       </header>
       
       {/* Main Content */}
-      <main className="container mx-auto p-4 pt-6">
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-          {/* Left Column */}
-          <div className="lg:col-span-2 space-y-6">
-            {/* Case Files */}
-            <div className="bg-white rounded-xl shadow-md overflow-hidden">
-              <div className="px-6 py-4 border-b border-gray-100 flex justify-between items-center">
-                <h2 className="text-lg font-semibold text-[#251c1a]">Your Case Files</h2>
-                <button className="bg-[#251c1a] text-white rounded-lg py-2 px-3 text-sm flex items-center hover:bg-[#251c1a]/90 transition-colors">
-                  <FaPlus className="mr-1" size={12} />
-                  New Case
-                </button>
-              </div>
-              <div className="divide-y divide-gray-100">
-                {caseFiles.map(file => (
-                  <div key={file.id} className="p-4 hover:bg-[#f3eee5]/20 transition-colors">
-                    <div className="flex justify-between items-center">
-                      <div className="flex items-center">
-                        <div className="bg-[#251c1a]/10 w-10 h-10 rounded-lg flex items-center justify-center mr-3 flex-shrink-0">
-                          <FaFileAlt className="text-[#251c1a]" />
-                        </div>
-                        <div>
-                          <h3 className="font-medium text-[#251c1a]">{file.title}</h3>
-                          <div className="flex items-center mt-1">
-                            <span className="text-xs text-[#251c1a]/60 mr-3">{file.type}</span>
-                            <span className="text-xs text-[#251c1a]/60 mr-3">Modified: {file.modified}</span>
-                            {renderStatusBadge(file.status)}
-                          </div>
-                        </div>
-                      </div>
-                      <div className="flex items-center">
-                        <button className={`mr-2 ${file.star ? 'text-yellow-500' : 'text-[#251c1a]/30 hover:text-yellow-500'}`}>
-                          <FaStar />
-                        </button>
-                        <button className="text-[#251c1a]/50 hover:text-[#251c1a] transition-colors">
-                          <FaEllipsisH />
-                        </button>
-                      </div>
+      <main className="container mx-auto p-6">
+        <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
+          {/* Left Column with AI Models */}
+          <div className="lg:col-span-3">
+            <div>
+              <h2 className="text-2xl font-bold text-[#251c1a] mb-4 border-b-2 border-[#c8a27c] pb-2">AI Legal Assistants</h2>
+              
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                {/* Legal Research Chatbot */}
+                <div className="bg-white rounded-xl shadow-md overflow-hidden transition-all duration-300 hover:shadow-xl hover:translate-y-[-5px]">
+                  <div className="h-36 bg-gradient-to-r from-[#251c1a] to-[#3b2a25] flex items-center justify-center p-6">
+                    <div className="bg-[#f3eee5]/30 p-4 rounded-full">
+                      <FaBalanceScale className="text-[#f3eee5] text-3xl" />
                     </div>
                   </div>
-                ))}
-              </div>
-              <div className="px-6 py-3 bg-gray-50 text-center">
-                <button className="text-[#251c1a]/70 text-sm font-medium hover:text-[#251c1a] transition-colors">
-                  View All Cases
-                </button>
-              </div>
-            </div>
+                  <div className="p-5">
+                    <h3 className="text-xl font-semibold text-[#251c1a] mb-3">Legal Research Chatbot</h3>
+                    <p className="text-[#251c1a]/80 mb-4">
+                      Intelligent assistant for legal research and case law analysis.
+                    </p>
+                    <div className="flex mb-5">
+                      <span className="bg-[#c8a27c]/20 text-[#251c1a] text-xs px-2 py-1 rounded mr-2">Research</span>
+                      <span className="bg-[#c8a27c]/20 text-[#251c1a] text-xs px-2 py-1 rounded">Case Law</span>
+                    </div>
+                    <button className="w-full bg-[#251c1a] text-[#f3eee5] py-2 px-4 rounded-lg hover:bg-[#3b2a25] transition-colors text-sm">
+                      Launch Assistant
+                    </button>
+                  </div>
+                </div>
 
-            {/* Recent Activity */}
-            <div className="bg-white rounded-xl shadow-md overflow-hidden">
-              <div className="px-6 py-4 border-b border-gray-100">
-                <h2 className="text-lg font-semibold text-[#251c1a]">Recent Activity</h2>
-              </div>
-              <div className="p-4">
-                <div className="space-y-4">
-                  <div className="flex items-start">
-                    <div className="bg-blue-100 rounded-full p-2 mr-3">
-                      <FaPencilAlt className="text-blue-700 text-sm" />
-                    </div>
-                    <div>
-                      <p className="text-[#251c1a] font-medium">You edited "Sharma vs. Mehta Property Dispute"</p>
-                      <p className="text-sm text-[#251c1a]/60">Today, 10:24 AM</p>
+                {/* Legal Case Document Reader */}
+                <div className="bg-white rounded-xl shadow-md overflow-hidden transition-all duration-300 hover:shadow-xl hover:translate-y-[-5px]">
+                  <div className="h-36 bg-gradient-to-r from-[#3b2a25] to-[#4e3730] flex items-center justify-center p-6">
+                    <div className="bg-[#f3eee5]/30 p-4 rounded-full">
+                      <FaRegFileAlt className="text-[#f3eee5] text-3xl" />
                     </div>
                   </div>
-                  
-                  <div className="flex items-start">
-                    <div className="bg-green-100 rounded-full p-2 mr-3">
-                      <FaRegCheckCircle className="text-green-700 text-sm" />
+                  <div className="p-5">
+                    <h3 className="text-xl font-semibold text-[#251c1a] mb-3">Case Document Reader</h3>
+                    <p className="text-[#251c1a]/80 mb-4">
+                      Extract insights and analyze legal documents automatically.
+                    </p>
+                    <div className="flex mb-5">
+                      <span className="bg-[#c8a27c]/20 text-[#251c1a] text-xs px-2 py-1 rounded mr-2">Documents</span>
+                      <span className="bg-[#c8a27c]/20 text-[#251c1a] text-xs px-2 py-1 rounded">Analysis</span>
                     </div>
-                    <div>
-                      <p className="text-[#251c1a] font-medium">You marked "IndiTech Contract Review" as completed</p>
-                      <p className="text-sm text-[#251c1a]/60">Yesterday, 3:45 PM</p>
+                    <button className="w-full bg-[#251c1a] text-[#f3eee5] py-2 px-4 rounded-lg hover:bg-[#3b2a25] transition-colors text-sm">
+                      Launch Assistant
+                    </button>
+                  </div>
+                </div>
+
+                {/* Legal IPC Finder */}
+                <div className="bg-white rounded-xl shadow-md overflow-hidden transition-all duration-300 hover:shadow-xl hover:translate-y-[-5px]">
+                  <div className="h-36 bg-gradient-to-r from-[#4e3730] to-[#614639] flex items-center justify-center p-6">
+                    <div className="bg-[#f3eee5]/30 p-4 rounded-full">
+                      <FaGavel className="text-[#f3eee5] text-3xl" />
                     </div>
                   </div>
-                  
-                  <div className="flex items-start">
-                    <div className="bg-purple-100 rounded-full p-2 mr-3">
-                      <FaBalanceScale className="text-purple-700 text-sm" />
+                  <div className="p-5">
+                    <h3 className="text-xl font-semibold text-[#251c1a] mb-3">IPC Code Finder</h3>
+                    <p className="text-[#251c1a]/80 mb-4">
+                      Quickly identify relevant Indian Penal Code sections.
+                    </p>
+                    <div className="flex mb-5">
+                      <span className="bg-[#c8a27c]/20 text-[#251c1a] text-xs px-2 py-1 rounded mr-2">IPC</span>
+                      <span className="bg-[#c8a27c]/20 text-[#251c1a] text-xs px-2 py-1 rounded">Indian Law</span>
                     </div>
-                    <div>
-                      <p className="text-[#251c1a] font-medium">New precedent added to "Kumar IP Case"</p>
-                      <p className="text-sm text-[#251c1a]/60">Apr 28, 2025</p>
-                    </div>
-                  </div>
-                  
-                  <div className="flex items-start">
-                    <div className="bg-red-100 rounded-full p-2 mr-3">
-                      <FaTrash className="text-red-700 text-sm" />
-                    </div>
-                    <div>
-                      <p className="text-[#251c1a] font-medium">Deleted draft document from "Singh Family Trust"</p>
-                      <p className="text-sm text-[#251c1a]/60">Apr 26, 2025</p>
-                    </div>
+                    <button className="w-full bg-[#251c1a] text-[#f3eee5] py-2 px-4 rounded-lg hover:bg-[#3b2a25] transition-colors text-sm">
+                      Launch Assistant
+                    </button>
                   </div>
                 </div>
               </div>
-              <div className="px-6 py-3 bg-gray-50 text-center">
-                <button className="text-[#251c1a]/70 text-sm font-medium hover:text-[#251c1a] transition-colors">
-                  View Activity Log
-                </button>
-              </div>
             </div>
           </div>
-
-          {/* Right Column */}
-          <div className="space-y-6">
-            {/* Quick Actions */}
-            <div className="bg-white rounded-xl shadow-md p-5">
-              <h2 className="text-lg font-semibold text-[#251c1a] mb-4">Quick Actions</h2>
-              <div className="grid grid-cols-2 gap-3">
-                <button className="bg-[#251c1a]/5 hover:bg-[#251c1a]/10 text-[#251c1a] py-3 px-4 rounded-lg flex flex-col items-center transition-colors">
-                  <FaFileAlt className="mb-2" />
-                  <span className="text-sm">New Document</span>
-                </button>
-                <button className="bg-[#251c1a]/5 hover:bg-[#251c1a]/10 text-[#251c1a] py-3 px-4 rounded-lg flex flex-col items-center transition-colors">
-                  <FaFolder className="mb-2" />
-                  <span className="text-sm">New Case</span>
-                </button>
-                <button className="bg-[#251c1a]/5 hover:bg-[#251c1a]/10 text-[#251c1a] py-3 px-4 rounded-lg flex flex-col items-center transition-colors">
-                  <FaUserTie className="mb-2" />
-                  <span className="text-sm">Add Client</span>
-                </button>
-                <Link to="/chatbot" className="bg-[#251c1a]/5 hover:bg-[#251c1a]/10 text-[#251c1a] py-3 px-4 rounded-lg flex flex-col items-center transition-colors">
-                  <FaRobot className="mb-2" />
-                  <span className="text-sm">Chat with AI</span>
-                </Link>
-              </div>
-            </div>
-
-            {/* Recent Searches */}
-            <div className="bg-white rounded-xl shadow-md p-5">
-              <h2 className="text-lg font-semibold text-[#251c1a] mb-4">Recent Searches</h2>
-              <ul className="space-y-3">
-                {recentSearches.map((search, index) => (
-                  <li key={index}>
-                    <button className="flex items-center text-left w-full py-2 px-3 rounded-lg hover:bg-[#251c1a]/5 transition-colors">
-                      <FaClock className="text-[#251c1a]/50 mr-2 flex-shrink-0" />
-                      <span className="text-sm text-[#251c1a]/80 line-clamp-1">{search}</span>
-                    </button>
-                  </li>
-                ))}
-              </ul>
-            </div>
-
-            {/* Upcoming */}
-            <div className="bg-white rounded-xl shadow-md p-5">
-              <h2 className="text-lg font-semibold text-[#251c1a] mb-4">Upcoming</h2>
-              <ul className="space-y-3">
-                {upcomingEvents.map((event, index) => (
-                  <li key={index} className="border-l-2 border-[#251c1a] pl-3">
-                    <p className="font-medium text-[#251c1a]">{event.title}</p>
-                    <div className="flex items-center mt-1">
-                      <FaRegCalendarAlt className="text-xs text-[#251c1a]/60 mr-1" />
-                      <span className="text-xs text-[#251c1a]/60">{event.date}</span>
-                      <span className="text-xs bg-[#251c1a]/10 text-[#251c1a]/70 px-2 py-0.5 rounded ml-2">{event.type}</span>
-                    </div>
-                  </li>
-                ))}
-              </ul>
-              <button className="w-full mt-4 bg-[#251c1a]/5 hover:bg-[#251c1a]/10 text-[#251c1a] py-2 rounded-lg text-sm transition-colors">
-                View Calendar
+          
+          {/* Right Column with Legal News */}
+          <div className="lg:col-span-1">
+            <h2 className="text-2xl font-bold text-[#251c1a] mb-4 border-b-2 border-[#c8a27c] pb-2">
+              <FaNewspaper className="inline-block mr-2 text-[#c8a27c]" />
+              Legal News
+            </h2>
+            
+            <div className="space-y-4">
+              <a href="https://www.livelaw.in/" target="_blank" rel="noopener noreferrer" className="block bg-white rounded-xl shadow-md overflow-hidden hover:shadow-lg transition-shadow">
+                <div className="h-36 bg-cover bg-center" style={{backgroundImage: "url('https://images.unsplash.com/photo-1589829545856-d10d557cf95f?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80')"}}>
+                </div>
+                <div className="p-4">
+                  <div className="flex justify-between items-center mb-2">
+                    <span className="inline-block px-2 py-1 text-xs bg-[#c8a27c]/20 text-[#251c1a] rounded">Supreme Court</span>
+                    <FaExternalLinkAlt className="text-xs text-[#251c1a]/50" />
+                  </div>
+                  <h3 className="font-medium text-[#251c1a] mb-1">Supreme Court Upholds New Privacy Law</h3>
+                  <p className="text-sm text-[#251c1a]/70 mb-2">LiveLaw.in</p>
+                </div>
+              </a>
+              
+              <a href="https://www.barandbench.com/" target="_blank" rel="noopener noreferrer" className="block bg-white rounded-xl shadow-md overflow-hidden hover:shadow-lg transition-shadow">
+                <div className="p-4">
+                  <div className="flex justify-between items-center mb-2">
+                    <span className="inline-block px-2 py-1 text-xs bg-[#c8a27c]/20 text-[#251c1a] rounded">Legislation</span>
+                    <FaExternalLinkAlt className="text-xs text-[#251c1a]/50" />
+                  </div>
+                  <h3 className="font-medium text-[#251c1a] mb-1">New Amendments to Corporate Law Take Effect</h3>
+                  <p className="text-sm text-[#251c1a]/70 mb-2">Bar & Bench</p>
+                </div>
+              </a>
+              
+              <a href="https://indianexpress.com/section/india/indian-legal/" target="_blank" rel="noopener noreferrer" className="block bg-white rounded-xl shadow-md overflow-hidden hover:shadow-lg transition-shadow">
+                <div className="p-4">
+                  <div className="flex justify-between items-center mb-2">
+                    <span className="inline-block px-2 py-1 text-xs bg-[#c8a27c]/20 text-[#251c1a] rounded">High Court</span>
+                    <FaExternalLinkAlt className="text-xs text-[#251c1a]/50" />
+                  </div>
+                  <h3 className="font-medium text-[#251c1a] mb-1">Delhi High Court Rules on Digital Evidence Standards</h3>
+                  <p className="text-sm text-[#251c1a]/70 mb-2">Indian Express</p>
+                </div>
+              </a>
+              
+              <a href="https://www.lawsisto.com/" target="_blank" rel="noopener noreferrer" className="block bg-white rounded-xl shadow-md overflow-hidden hover:shadow-lg transition-shadow">
+                <div className="p-4">
+                  <div className="flex justify-between items-center mb-2">
+                    <span className="inline-block px-2 py-1 text-xs bg-[#c8a27c]/20 text-[#251c1a] rounded">Legal Tech</span>
+                    <FaExternalLinkAlt className="text-xs text-[#251c1a]/50" />
+                  </div>
+                  <h3 className="font-medium text-[#251c1a] mb-1">AI Adoption in Legal Sector Grows 40%</h3>
+                  <p className="text-sm text-[#251c1a]/70 mb-2">LawSisto</p>
+                </div>
+              </a>
+              
+              {/* More Legal News Toggle Button */}
+              <button 
+                onClick={() => setShowMoreNews(!showMoreNews)} 
+                className="flex items-center justify-center w-full bg-[#f3eee5] hover:bg-[#e8e2d9] text-[#251c1a] border border-[#c8a27c]/30 rounded-lg py-2 text-sm transition-colors"
+              >
+                {showMoreNews ? 'Show Less' : 'More Legal News'} 
+                <FaChevronDown className={`ml-1 transition-transform ${showMoreNews ? 'rotate-180' : ''}`} />
               </button>
+              
+              {/* Additional News Articles that show when expanded */}
+              {showMoreNews && (
+                <div className="space-y-4 mt-4 transition-all duration-300">
+                  <a href="https://timesofindia.indiatimes.com/india/supreme-court" target="_blank" rel="noopener noreferrer" className="block bg-white rounded-xl shadow-md overflow-hidden hover:shadow-lg transition-shadow">
+                    <div className="p-4">
+                      <div className="flex justify-between items-center mb-2">
+                        <span className="inline-block px-2 py-1 text-xs bg-[#c8a27c]/20 text-[#251c1a] rounded">Supreme Court</span>
+                        <FaExternalLinkAlt className="text-xs text-[#251c1a]/50" />
+                      </div>
+                      <h3 className="font-medium text-[#251c1a] mb-1">SC Orders States to Implement Police Reforms</h3>
+                      <p className="text-sm text-[#251c1a]/70 mb-2">Times of India</p>
+                    </div>
+                  </a>
+                  
+                  <a href="https://www.hindustantimes.com/india-news/legal" target="_blank" rel="noopener noreferrer" className="block bg-white rounded-xl shadow-md overflow-hidden hover:shadow-lg transition-shadow">
+                    <div className="p-4">
+                      <div className="flex justify-between items-center mb-2">
+                        <span className="inline-block px-2 py-1 text-xs bg-[#c8a27c]/20 text-[#251c1a] rounded">Criminal Law</span>
+                        <FaExternalLinkAlt className="text-xs text-[#251c1a]/50" />
+                      </div>
+                      <h3 className="font-medium text-[#251c1a] mb-1">Parliament Approves New Criminal Procedure Bill</h3>
+                      <p className="text-sm text-[#251c1a]/70 mb-2">Hindustan Times</p>
+                    </div>
+                  </a>
+                  
+                  <a href="https://www.thehindu.com/news/national/courts" target="_blank" rel="noopener noreferrer" className="block bg-white rounded-xl shadow-md overflow-hidden hover:shadow-lg transition-shadow">
+                    <div className="p-4">
+                      <div className="flex justify-between items-center mb-2">
+                        <span className="inline-block px-2 py-1 text-xs bg-[#c8a27c]/20 text-[#251c1a] rounded">Constitutional</span>
+                        <FaExternalLinkAlt className="text-xs text-[#251c1a]/50" />
+                      </div>
+                      <h3 className="font-medium text-[#251c1a] mb-1">Constitutional Bench to Review Electoral Bond Case</h3>
+                      <p className="text-sm text-[#251c1a]/70 mb-2">The Hindu</p>
+                    </div>
+                  </a>
+                  
+                  <a href="https://economictimes.indiatimes.com/news/india/law-courts" target="_blank" rel="noopener noreferrer" className="block bg-white rounded-xl shadow-md overflow-hidden hover:shadow-lg transition-shadow">
+                    <div className="p-4">
+                      <div className="flex justify-between items-center mb-2">
+                        <span className="inline-block px-2 py-1 text-xs bg-[#c8a27c]/20 text-[#251c1a] rounded">Tax Laws</span>
+                        <FaExternalLinkAlt className="text-xs text-[#251c1a]/50" />
+                      </div>
+                      <h3 className="font-medium text-[#251c1a] mb-1">High Court Strikes Down Retrospective Tax Amendment</h3>
+                      <p className="text-sm text-[#251c1a]/70 mb-2">Economic Times</p>
+                    </div>
+                  </a>
+                </div>
+              )}
             </div>
           </div>
         </div>
