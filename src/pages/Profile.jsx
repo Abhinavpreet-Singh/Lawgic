@@ -1,25 +1,42 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { useAuth } from '../context/AuthContext';
-import { uploadProfileImage, updateUserDisplayName, updateUserProfilePhoto } from '../../firebase/profileService';
-import { FaUser, FaCamera, FaPencilAlt, FaCheck, FaTimes, FaGavel } from 'react-icons/fa';
+import { uploadProfileImage, updateUserDisplayName, updateUserProfilePhoto, updateUserInterests } from '../../firebase/profileService';
+import { FaUser, FaCamera, FaPencilAlt, FaCheck, FaTimes, FaGavel, FaArrowLeft, FaPlus } from 'react-icons/fa';
 import { motion } from 'framer-motion';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 const Profile = () => {
-  const { currentUser, userProfile } = useAuth();
+  const { currentUser, userProfile, refreshUserData } = useAuth();
   const [isEditingName, setIsEditingName] = useState(false);
   const [displayName, setDisplayName] = useState('');
   const [isUploading, setIsUploading] = useState(false);
   const [uploadProgress, setUploadProgress] = useState(0);
   const [error, setError] = useState('');
   const [successMessage, setSuccessMessage] = useState('');
+  const [selectedInterests, setSelectedInterests] = useState([]);
+  const [isAddingInterest, setIsAddingInterest] = useState(false);
+  const [newInterest, setNewInterest] = useState('');
   const fileInputRef = useRef(null);
+  const navigate = useNavigate();
+
+  // Available legal interest options
+  const legalInterests = [
+    "Criminal Law", "Civil Law", "Constitutional Law", "Corporate Law", 
+    "Environmental Law", "Family Law", "Human Rights", "Intellectual Property", 
+    "International Law", "Labor Law", "Tax Law", "Real Estate Law",
+    "Immigration Law", "Cyber Law", "Medical Law", "Banking & Finance",
+    "Competition Law", "Consumer Protection", "Alternative Dispute Resolution"
+  ];
 
   useEffect(() => {
     if (currentUser) {
       setDisplayName(currentUser.displayName || '');
     }
-  }, [currentUser]);
+    
+    if (userProfile?.interests) {
+      setSelectedInterests(userProfile.interests);
+    }
+  }, [currentUser, userProfile]);
 
   const handleNameEdit = () => {
     setIsEditingName(true);
@@ -34,9 +51,13 @@ const Profile = () => {
     try {
       setError('');
       await updateUserDisplayName(currentUser, displayName);
+      await refreshUserData();
       setIsEditingName(false);
       setSuccessMessage('Name updated successfully!');
-      setTimeout(() => setSuccessMessage(''), 3000);
+      setTimeout(() => {
+        setSuccessMessage('');
+        navigate('/dashboard');
+      }, 1500);
     } catch (error) {
       console.error('Error updating name:', error);
       setError('Failed to update name. Please try again.');
@@ -68,6 +89,13 @@ const Profile = () => {
       setIsUploading(true);
       setError('');
       
+      // Create a temporary object URL for immediate visual feedback
+      const tempURL = URL.createObjectURL(file);
+      const profilePicElement = document.getElementById('profile-picture');
+      if (profilePicElement && profilePicElement.tagName === 'IMG') {
+        profilePicElement.src = tempURL;
+      }
+      
       // Simulate upload progress
       const progressInterval = setInterval(() => {
         setUploadProgress(prev => {
@@ -86,9 +114,16 @@ const Profile = () => {
 
       // Update the auth profile with the new photo URL
       await updateUserProfilePhoto(currentUser, photoURL);
-      
+      await refreshUserData();
       setSuccessMessage('Profile picture updated successfully!');
-      setTimeout(() => setSuccessMessage(''), 3000);
+      
+      // Revoke the temporary URL to free memory
+      URL.revokeObjectURL(tempURL);
+      
+      setTimeout(() => {
+        setSuccessMessage('');
+        navigate('/dashboard');
+      }, 1500);
     } catch (error) {
       console.error('Error uploading image:', error);
       setError('Failed to upload image. Please try again.');
@@ -100,6 +135,40 @@ const Profile = () => {
 
   const triggerFileInput = () => {
     fileInputRef.current.click();
+  };
+
+  const toggleInterest = (interest) => {
+    setSelectedInterests(prev => {
+      if (prev.includes(interest)) {
+        return prev.filter(item => item !== interest);
+      } else {
+        return [...prev, interest];
+      }
+    });
+  };
+
+  const handleAddCustomInterest = () => {
+    if (newInterest.trim() && !selectedInterests.includes(newInterest.trim())) {
+      setSelectedInterests(prev => [...prev, newInterest.trim()]);
+      setNewInterest('');
+      setIsAddingInterest(false);
+    }
+  };
+
+  const handleUpdateInterests = async () => {
+    try {
+      setError('');
+      await updateUserInterests(currentUser.uid, selectedInterests);
+      await refreshUserData();
+      setSuccessMessage('Interests updated successfully!');
+      setTimeout(() => {
+        setSuccessMessage('');
+        navigate('/dashboard');
+      }, 1500);
+    } catch (error) {
+      console.error('Error updating interests:', error);
+      setError('Failed to update interests. Please try again.');
+    }
   };
 
   if (!currentUser) {
@@ -128,42 +197,46 @@ const Profile = () => {
           transition={{ duration: 0.5 }}
         >
           {/* Profile Header */}
-          <div className="bg-gradient-to-r from-[#251c1a] to-[#3a2e2b] relative h-48 sm:h-64 flex items-center justify-center">
+          <div className="bg-gradient-to-r from-[#251c1a] to-[#3b2a25] relative h-48 sm:h-64">
             <div className="absolute top-6 left-6">
-              <Link to="/dashboard" className="text-[#f3eee5] hover:underline flex items-center">
-                <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
-                </svg>
-                Back to Dashboard
+              <Link to="/dashboard" className="text-[#f3eee5] hover:text-[#c8a27c] transition-colors flex items-center group">
+                <FaArrowLeft className="mr-2 group-hover:transform group-hover:-translate-x-1 transition-transform" />
+                <span>Back to Dashboard</span>
               </Link>
             </div>
             
-            <div className="w-20 h-20 bg-[#251c1a]/50 rounded-full flex items-center justify-center">
-              <FaGavel className="text-[#f3eee5] text-3xl" />
+            <div className="absolute inset-0 flex items-center justify-center">
+              <div className="w-24 h-24 bg-[#c8a27c]/30 rounded-full flex items-center justify-center backdrop-blur-sm">
+                <FaGavel className="text-[#f3eee5] text-4xl" />
+              </div>
             </div>
+            
+            <div className="absolute bottom-0 left-0 w-full h-20 bg-gradient-to-t from-[#251c1a]/40 to-transparent"></div>
           </div>
           
           <div className="relative px-6 sm:px-8 pb-8">
             {/* Profile Picture */}
-            <div className="relative mx-auto -mt-16 w-32 h-32 rounded-full border-4 border-white shadow-md bg-[#f3eee5]">
+            <div className="relative mx-auto -mt-16 w-32 h-32 rounded-full border-4 border-white shadow-lg bg-[#f3eee5]">
               <div className="w-full h-full rounded-full overflow-hidden">
                 {currentUser.photoURL ? (
                   <img 
+                    id="profile-picture"
                     src={currentUser.photoURL} 
                     alt="Profile" 
                     className="w-full h-full object-cover"
                   />
                 ) : (
                   <div className="w-full h-full flex items-center justify-center bg-[#251c1a]/10">
-                    <FaUser className="text-4xl text-[#251c1a]/40" />
+                    <FaUser className="text-4xl text-[#251c1a]/40" id="profile-picture" />
                   </div>
                 )}
               </div>
               
               <button 
                 onClick={triggerFileInput}
-                className="absolute bottom-0 right-0 w-10 h-10 bg-[#251c1a] rounded-full text-white flex items-center justify-center shadow-lg"
+                className="absolute bottom-0 right-0 w-10 h-10 bg-[#c8a27c] rounded-full text-white flex items-center justify-center shadow-lg hover:bg-[#b08e69] transition-colors"
                 disabled={isUploading}
+                title="Upload profile picture"
               >
                 <FaCamera />
               </button>
@@ -179,13 +252,13 @@ const Profile = () => {
               
               {isUploading && (
                 <div className="absolute inset-0 rounded-full overflow-hidden flex items-center justify-center bg-black/30">
-                  <div className="w-full h-1 bg-[#251c1a]/20 absolute bottom-0">
+                  <div className="w-full h-1.5 bg-[#f3eee5]/30 absolute bottom-0">
                     <div 
-                      className="h-full bg-[#251c1a]" 
+                      className="h-full bg-[#c8a27c]" 
                       style={{ width: `${uploadProgress}%`, transition: 'width 0.3s ease-out' }}
                     ></div>
                   </div>
-                  <span className="text-white font-medium">{uploadProgress}%</span>
+                  <span className="text-white font-medium text-sm">{uploadProgress}%</span>
                 </div>
               )}
             </div>
@@ -199,18 +272,21 @@ const Profile = () => {
                       type="text"
                       value={displayName}
                       onChange={(e) => setDisplayName(e.target.value)}
-                      className="border border-[#251c1a]/20 rounded px-3 py-2 text-xl font-semibold text-[#251c1a] text-center focus:outline-none focus:ring-2 focus:ring-[#251c1a]/40"
+                      className="border border-[#c8a27c]/30 rounded-lg px-3 py-2 text-xl font-semibold text-[#251c1a] text-center focus:outline-none focus:ring-2 focus:ring-[#c8a27c]"
                       placeholder="Your name"
+                      autoFocus
                     />
                     <button
                       onClick={handleNameSave}
-                      className="w-8 h-8 bg-green-500 text-white rounded-full flex items-center justify-center"
+                      className="w-8 h-8 bg-[#c8a27c] text-white rounded-full flex items-center justify-center hover:bg-[#b08e69] transition-colors"
+                      title="Save"
                     >
                       <FaCheck />
                     </button>
                     <button
                       onClick={handleNameCancel}
-                      className="w-8 h-8 bg-red-500 text-white rounded-full flex items-center justify-center"
+                      className="w-8 h-8 bg-[#251c1a] text-white rounded-full flex items-center justify-center hover:bg-[#3b2a25] transition-colors"
+                      title="Cancel"
                     >
                       <FaTimes />
                     </button>
@@ -222,7 +298,8 @@ const Profile = () => {
                     </h1>
                     <button
                       onClick={handleNameEdit}
-                      className="ml-2 text-[#251c1a]/50 hover:text-[#251c1a] transition-colors"
+                      className="ml-2 text-[#c8a27c] hover:text-[#b08e69] transition-colors"
+                      title="Edit name"
                     >
                       <FaPencilAlt />
                     </button>
@@ -231,64 +308,138 @@ const Profile = () => {
               </div>
               
               <p className="mt-1 text-[#251c1a]/70">{currentUser.email}</p>
-              
-              {error && (
-                <div className="mt-4 px-4 py-2 bg-red-100 text-red-700 rounded-lg text-sm">
-                  {error}
-                </div>
-              )}
-              
-              {successMessage && (
-                <div className="mt-4 px-4 py-2 bg-green-100 text-green-700 rounded-lg text-sm">
-                  {successMessage}
-                </div>
-              )}
             </div>
             
             {/* Account Info */}
             <div className="mt-8">
-              <h2 className="text-xl font-semibold mb-4 text-[#251c1a]">Account Information</h2>
-              <div className="bg-[#251c1a]/5 rounded-lg p-4 space-y-4">
-                <div className="flex justify-between">
-                  <span className="text-[#251c1a]/70">Member since</span>
-                  <span className="font-medium text-[#251c1a]">
+              <h2 className="text-xl font-semibold mb-4 text-[#251c1a] flex items-center">
+                <span className="bg-[#c8a27c]/20 w-8 h-8 rounded-full flex items-center justify-center mr-2">
+                  <FaUser className="text-[#c8a27c]" />
+                </span>
+                Account Information
+              </h2>
+              <div className="bg-[#f9f6f1] rounded-lg p-6 space-y-4 border border-[#c8a27c]/20">
+                <div className="flex justify-between items-center border-b border-[#c8a27c]/10 pb-3">
+                  <span className="text-[#251c1a]/70 font-medium">Member since</span>
+                  <span className="font-semibold text-[#251c1a] bg-[#c8a27c]/10 px-3 py-1 rounded-full text-sm">
                     {userProfile?.createdAt 
-                      ? new Date(userProfile.createdAt).toLocaleDateString() 
-                      : new Date().toLocaleDateString()}
+                      ? new Date(userProfile.createdAt).toLocaleDateString('en-US', {
+                          year: 'numeric',
+                          month: 'long',
+                          day: 'numeric'
+                        })
+                      : new Date().toLocaleDateString('en-US', {
+                          year: 'numeric',
+                          month: 'long',
+                          day: 'numeric'
+                        })}
                   </span>
                 </div>
-                <div className="flex justify-between">
-                  <span className="text-[#251c1a]/70">Account type</span>
-                  <span className="font-medium text-[#251c1a]">
+                <div className="flex justify-between items-center">
+                  <span className="text-[#251c1a]/70 font-medium">Account type</span>
+                  <span className="font-semibold text-[#251c1a] bg-[#c8a27c]/10 px-3 py-1 rounded-full text-sm flex items-center">
                     {userProfile?.accountType === 'google' 
-                      ? 'Google' 
+                      ? 'Google Login'
                       : userProfile?.accountType === 'github'
-                      ? 'GitHub'
-                      : 'Email'}
+                      ? 'GitHub Login'
+                      : 'Email Login'}
                   </span>
                 </div>
               </div>
             </div>
             
-            {/* Legal Interest Areas - Can be expanded in future */}
+            {/* Legal Interest Areas */}
             <div className="mt-8">
-              <h2 className="text-xl font-semibold mb-4 text-[#251c1a]">Legal Interest Areas</h2>
-              <div className="bg-[#251c1a]/5 rounded-lg p-4 flex flex-wrap gap-2">
-                {userProfile?.interests && userProfile.interests.length > 0 ? (
-                  userProfile.interests.map((interest, index) => (
-                    <span 
-                      key={index}
-                      className="px-3 py-1 bg-[#251c1a]/10 text-[#251c1a] rounded-full text-sm"
+              <h2 className="text-xl font-semibold mb-4 text-[#251c1a] flex items-center">
+                <span className="bg-[#c8a27c]/20 w-8 h-8 rounded-full flex items-center justify-center mr-2">
+                  <FaGavel className="text-[#c8a27c]" />
+                </span>
+                Legal Interest Areas
+              </h2>
+              <div className="bg-[#f9f6f1] rounded-lg p-6 border border-[#c8a27c]/20">
+                <p className="text-[#251c1a]/70 mb-4">Select your legal interests to personalize your experience:</p>
+                
+                <div className="flex flex-wrap gap-2 mb-6">
+                  {legalInterests.map((interest) => (
+                    <button
+                      key={interest}
+                      onClick={() => toggleInterest(interest)}
+                      className={`px-3 py-2 text-sm rounded-full transition-all ${
+                        selectedInterests.includes(interest)
+                          ? 'bg-[#c8a27c] text-white font-medium'
+                          : 'bg-[#c8a27c]/10 text-[#251c1a] hover:bg-[#c8a27c]/20'
+                      }`}
                     >
                       {interest}
-                    </span>
-                  ))
-                ) : (
-                  <p className="text-[#251c1a]/50 text-sm">
-                    No interests specified yet. You can update your legal interests from your dashboard.
-                  </p>
-                )}
+                      {selectedInterests.includes(interest) && <span className="ml-2">✓</span>}
+                    </button>
+                  ))}
+                  
+                  {/* Custom interest entry */}
+                  {isAddingInterest ? (
+                    <div className="flex items-center space-x-2 min-w-[200px]">
+                      <input
+                        type="text"
+                        value={newInterest}
+                        onChange={(e) => setNewInterest(e.target.value)}
+                        className="flex-1 border border-[#c8a27c]/30 rounded-lg px-3 py-1 text-sm focus:outline-none focus:ring-2 focus:ring-[#c8a27c]"
+                        placeholder="Add custom interest"
+                        autoFocus
+                      />
+                      <button
+                        onClick={handleAddCustomInterest}
+                        className="w-7 h-7 bg-[#c8a27c] text-white rounded-full flex items-center justify-center hover:bg-[#b08e69] transition-colors"
+                        disabled={!newInterest.trim()}
+                      >
+                        <FaCheck className="text-xs" />
+                      </button>
+                      <button
+                        onClick={() => {
+                          setIsAddingInterest(false);
+                          setNewInterest('');
+                        }}
+                        className="w-7 h-7 bg-[#251c1a] text-white rounded-full flex items-center justify-center hover:bg-[#3b2a25] transition-colors"
+                      >
+                        <FaTimes className="text-xs" />
+                      </button>
+                    </div>
+                  ) : (
+                    <button
+                      onClick={() => setIsAddingInterest(true)}
+                      className="px-3 py-2 text-sm rounded-full bg-[#251c1a]/10 text-[#251c1a] hover:bg-[#251c1a]/20 flex items-center"
+                    >
+                      <FaPlus className="mr-1 text-xs" /> Add Custom
+                    </button>
+                  )}
+                </div>
+                
+                {/* Update button */}
+                <button
+                  onClick={handleUpdateInterests}
+                  className="w-full bg-[#c8a27c] text-white py-2.5 rounded-lg hover:bg-[#b08e69] transition-colors font-medium flex items-center justify-center"
+                  disabled={selectedInterests.length === 0}
+                >
+                  Update Interests
+                </button>
               </div>
+            </div>
+            
+            {/* Actions */}
+            <div className="mt-8 flex justify-between">
+              <button 
+                onClick={() => navigate('/dashboard')} 
+                className="px-6 py-3 bg-[#251c1a]/10 text-[#251c1a] rounded-lg hover:bg-[#251c1a]/20 transition-colors flex items-center"
+              >
+                <FaArrowLeft className="mr-2" />
+                Cancel
+              </button>
+              
+              <button 
+                onClick={() => navigate('/dashboard')} 
+                className="px-6 py-3 bg-[#251c1a] text-white rounded-lg hover:bg-[#3b2a25] transition-colors"
+              >
+                Save & Return to Dashboard
+              </button>
             </div>
           </div>
         </motion.div>

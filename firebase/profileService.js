@@ -113,6 +113,22 @@ export const updateUserProfilePhoto = async (user, photoURL) => {
   }
 };
 
+// Update user interests
+export const updateUserInterests = async (userId, interests) => {
+  try {
+    // Update in profile
+    await saveUserProfile(userId, { 
+      interests, 
+      updatedAt: new Date().toISOString() 
+    });
+    
+    return true;
+  } catch (error) {
+    console.error('Error updating interests:', error);
+    throw error;
+  }
+};
+
 // Check if a user has completed their profile
 export const hasCompletedProfile = async (userId) => {
   try {

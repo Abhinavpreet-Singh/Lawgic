@@ -303,12 +303,12 @@ const Dashboard = () => {
           <div>
             <h2 className="text-xl md:text-2xl font-bold text-[#251c1a] mb-4 sm:mb-6 pb-2 border-b-2 border-[#c8a27c]">
               <FaNewspaper className="inline-block mr-2 text-[#c8a27c]" />
-              Legal Updates
+              Latest News
             </h2>
             
             <div className="space-y-4">
-              <a href="https://www.livelaw.in/top-stories/" target="_blank" rel="noopener noreferrer" className="group block bg-white rounded-xl shadow-md overflow-hidden hover:shadow-lg transition-all">
-                <div className="h-28 sm:h-36 bg-cover bg-center relative" style={{backgroundImage: "url('https://images.unsplash.com/photo-1589394547441-9041c6222a1e?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80')"}}>
+              <a href="https://www.barandbench.com/news/litigation/pahalgam-terror-attack-supreme-court-refuses-to-entertain-pil-for-probe" target="_blank" rel="noopener noreferrer" className="group block bg-white rounded-xl shadow-md overflow-hidden hover:shadow-lg transition-all">
+                <div className="h-28 sm:h-44 bg-cover bg-center relative" style={{backgroundImage: "url('https://cdnbbsr.s3waas.gov.in/s3ec0490f1f4972d133619a60c30f3559e/uploads/2023/12/2023121884.png'"}}>
                   <div className="absolute inset-0 bg-gradient-to-t from-[#251c1a]/80 to-transparent flex items-end">
                     <span className="inline-block px-3 py-1 m-3 text-xs bg-[#c8a27c] text-white rounded font-medium">Supreme Court</span>
                   </div>
@@ -318,38 +318,47 @@ const Dashboard = () => {
                     <p className="text-xs text-[#c8a27c] font-medium">MAY 1, 2025</p>
                     <FaExternalLinkAlt className="text-xs text-[#251c1a]/50 group-hover:text-[#c8a27c] transition-colors" />
                   </div>
-                  <h3 className="font-medium text-[#251c1a] mb-2 group-hover:text-[#c8a27c] transition-colors">Supreme Court Upholds New Privacy Law Amendments</h3>
-                  <p className="text-sm text-[#251c1a]/70">The Supreme Court's landmark decision reinforces data protection rights and sets new precedent for privacy cases...</p>
+                  <h3 className="font-medium text-[#251c1a] mb-2 group-hover:text-[#c8a27c] transition-colors">Pahalgam Terror Attack: Supreme Court Refuses to Entertain PIL for Probe</h3>
+                  <p className="text-sm text-[#251c1a]/70">The Supreme Court has refused to entertain a PIL seeking probe into the Pahalgam terror attack, stating it falls under the executive's domain. The Court advised the petitioner to approach appropriate authorities...</p>
+                  <div className="mt-3 pt-3 border-t border-dashed border-[#c8a27c]/20">
+                    <p className="text-xs text-[#251c1a]/50">Source: <a href="https://www.barandbench.com" target="_blank" rel="noopener noreferrer" className="text-[#c8a27c] hover:underline">Bar and Bench</a></p>
+                  </div>
                 </div>
               </a>
               
-              <a href="https://www.barandbench.com/news/litigation" target="_blank" rel="noopener noreferrer" className="group block bg-white rounded-xl shadow-md overflow-hidden hover:shadow-lg transition-all">
+              <a href="https://lawtrend.in/delhi-hc-restrains-dda-from-taking-action-against-shahi-idgah-over-use-of-park-for-religious-event/" target="_blank" rel="noopener noreferrer" className="group block bg-white rounded-xl shadow-md overflow-hidden hover:shadow-lg transition-all">
                 <div className="p-4">
                   <div className="flex justify-between items-center mb-2">
                     <div className="flex items-center">
                       <span className="inline-block w-2 h-2 rounded-full bg-[#c8a27c] mr-2"></span>
-                      <p className="text-xs text-[#c8a27c] font-medium">APR 28, 2025</p>
+                      <p className="text-xs text-[#c8a27c] font-medium">APR 30, 2025</p>
                     </div>
                     <FaExternalLinkAlt className="text-xs text-[#251c1a]/50 group-hover:text-[#c8a27c] transition-colors" />
                   </div>
-                  <span className="inline-block px-2 py-1 text-xs bg-[#c8a27c]/10 text-[#c8a27c] rounded mb-2">Legislation</span>
-                  <h3 className="font-medium text-[#251c1a] mb-2 group-hover:text-[#c8a27c] transition-colors">Parliament Approves New Corporate Law Amendments</h3>
-                  <p className="text-sm text-[#251c1a]/70">The amendments aim to simplify regulatory compliance for startups and small businesses...</p>
+                  <span className="inline-block px-2 py-1 text-xs bg-[#c8a27c]/10 text-[#c8a27c] rounded mb-2">Delhi High Court</span>
+                  <h3 className="font-medium text-[#251c1a] mb-2 group-hover:text-[#c8a27c] transition-colors">Delhi HC Restrains DDA From Taking Action Against Shahi Idgah Over Use of Park</h3>
+                  <p className="text-sm text-[#251c1a]/70">The Delhi High Court has restrained the Delhi Development Authority (DDA) from taking any coercive action against Shahi Idgah over the use of a park for a religious event. The court's interim order came after Shahi Idgah petitioned against DDA's notice...</p>
+                  <div className="mt-3 pt-3 border-t border-dashed border-[#c8a27c]/20">
+                    <p className="text-xs text-[#251c1a]/50">Source: <a href="https://lawtrend.in" target="_blank" rel="noopener noreferrer" className="text-[#c8a27c] hover:underline">Law Trend</a></p>
+                  </div>
                 </div>
               </a>
               
-              <a href="https://indianexpress.com/section/india/indian-legal/" target="_blank" rel="noopener noreferrer" className="group block bg-white rounded-xl shadow-md overflow-hidden hover:shadow-lg transition-all">
+              <a href="https://www.verdictum.in/court-updates/supreme-court/federation-of-medical-and-sales-representatives-associations-of-india-dolo-650-generic-medicine-1575950" target="_blank" rel="noopener noreferrer" className="group block bg-white rounded-xl shadow-md overflow-hidden hover:shadow-lg transition-all">
                 <div className="p-4">
                   <div className="flex justify-between items-center mb-2">
                     <div className="flex items-center">
                       <span className="inline-block w-2 h-2 rounded-full bg-[#c8a27c] mr-2"></span>
-                      <p className="text-xs text-[#c8a27c] font-medium">APR 25, 2025</p>
+                      <p className="text-xs text-[#c8a27c] font-medium">APR 29, 2025</p>
                     </div>
                     <FaExternalLinkAlt className="text-xs text-[#251c1a]/50 group-hover:text-[#c8a27c] transition-colors" />
                   </div>
-                  <span className="inline-block px-2 py-1 text-xs bg-[#c8a27c]/10 text-[#c8a27c] rounded mb-2">High Court</span>
-                  <h3 className="font-medium text-[#251c1a] mb-2 group-hover:text-[#c8a27c] transition-colors">Delhi HC Sets New Digital Evidence Standards</h3>
-                  <p className="text-sm text-[#251c1a]/70">The ruling establishes precedent for admission of digital evidence in court proceedings...</p>
+                  <span className="inline-block px-2 py-1 text-xs bg-[#c8a27c]/10 text-[#c8a27c] rounded mb-2">Healthcare Law</span>
+                  <h3 className="font-medium text-[#251c1a] mb-2 group-hover:text-[#c8a27c] transition-colors">Supreme Court Examines Rules Governing Generic Medicine Marketing</h3>
+                  <p className="text-sm text-[#251c1a]/70">The Supreme Court is examining rules governing marketing practices for generic medicines following a petition by the Federation of Medical and Sales Representatives Associations of India related to Dolo 650 promotional practices...</p>
+                  <div className="mt-3 pt-3 border-t border-dashed border-[#c8a27c]/20">
+                    <p className="text-xs text-[#251c1a]/50">Source: <a href="https://www.verdictum.in" target="_blank" rel="noopener noreferrer" className="text-[#c8a27c] hover:underline">Verdictum</a></p>
+                  </div>
                 </div>
               </a>
               
@@ -365,33 +374,39 @@ const Dashboard = () => {
               {/* Additional News Articles that show when expanded */}
               {showMoreNews && (
                 <div className="space-y-4 mt-4 animate-fadeIn">
-                  <a href="https://timesofindia.indiatimes.com/india/supreme-court" target="_blank" rel="noopener noreferrer" className="group block bg-white rounded-xl shadow-md overflow-hidden hover:shadow-lg transition-all">
+                  <a href="https://www.verdictum.in/court-updates/high-courts/allahabad-high-court/reconsideration-of-dismissal-of-commissioner-set-aside-2025-ahc-lko-23735-db-union-of-india-v-kamlesh-kumar-1575949" target="_blank" rel="noopener noreferrer" className="group block bg-white rounded-xl shadow-md overflow-hidden hover:shadow-lg transition-all">
                     <div className="p-4">
                       <div className="flex justify-between items-center mb-2">
                         <div className="flex items-center">
                           <span className="inline-block w-2 h-2 rounded-full bg-[#c8a27c] mr-2"></span>
-                          <p className="text-xs text-[#c8a27c] font-medium">APR 22, 2025</p>
+                          <p className="text-xs text-[#c8a27c] font-medium">APR 28, 2025</p>
                         </div>
                         <FaExternalLinkAlt className="text-xs text-[#251c1a]/50 group-hover:text-[#c8a27c] transition-colors" />
                       </div>
-                      <span className="inline-block px-2 py-1 text-xs bg-[#c8a27c]/10 text-[#c8a27c] rounded mb-2">Supreme Court</span>
-                      <h3 className="font-medium text-[#251c1a] mb-2 group-hover:text-[#c8a27c] transition-colors">SC Orders Implementation of Police Reforms</h3>
-                      <p className="text-sm text-[#251c1a]/70">The Supreme Court has directed all states to implement police reforms within 3 months...</p>
+                      <span className="inline-block px-2 py-1 text-xs bg-[#c8a27c]/10 text-[#c8a27c] rounded mb-2">Allahabad High Court</span>
+                      <h3 className="font-medium text-[#251c1a] mb-2 group-hover:text-[#c8a27c] transition-colors">Allahabad HC: Reconsideration of Dismissal of Commissioner Set Aside</h3>
+                      <p className="text-sm text-[#251c1a]/70">The Allahabad High Court has set aside the reconsideration of dismissal of a commissioner in a significant judgment in the case of Union of India v. Kamlesh Kumar. The Court emphasized proper procedural protocols in administrative cases...</p>
+                      <div className="mt-3 pt-3 border-t border-dashed border-[#c8a27c]/20">
+                        <p className="text-xs text-[#251c1a]/50">Source: <a href="https://www.verdictum.in" target="_blank" rel="noopener noreferrer" className="text-[#c8a27c] hover:underline">Verdictum</a></p>
+                      </div>
                     </div>
                   </a>
                   
-                  <a href="https://www.hindustantimes.com/india-news/legal" target="_blank" rel="noopener noreferrer" className="group block bg-white rounded-xl shadow-md overflow-hidden hover:shadow-lg transition-all">
+                  <a href="https://legal.economictimes.indiatimes.com/news/corporate-business/adani-settlement-pleas-delayed-by-sebis-review-of-processes/120755470" target="_blank" rel="noopener noreferrer" className="group block bg-white rounded-xl shadow-md overflow-hidden hover:shadow-lg transition-all">
                     <div className="p-4">
                       <div className="flex justify-between items-center mb-2">
                         <div className="flex items-center">
                           <span className="inline-block w-2 h-2 rounded-full bg-[#c8a27c] mr-2"></span>
-                          <p className="text-xs text-[#c8a27c] font-medium">APR 20, 2025</p>
+                          <p className="text-xs text-[#c8a27c] font-medium">APR 27, 2025</p>
                         </div>
                         <FaExternalLinkAlt className="text-xs text-[#251c1a]/50 group-hover:text-[#c8a27c] transition-colors" />
                       </div>
-                      <span className="inline-block px-2 py-1 text-xs bg-[#c8a27c]/10 text-[#c8a27c] rounded mb-2">Criminal Law</span>
-                      <h3 className="font-medium text-[#251c1a] mb-2 group-hover:text-[#c8a27c] transition-colors">New Criminal Procedure Bill Approved</h3>
-                      <p className="text-sm text-[#251c1a]/70">Parliament has approved the new criminal procedure bill with modernized provisions...</p>
+                      <span className="inline-block px-2 py-1 text-xs bg-[#c8a27c]/10 text-[#c8a27c] rounded mb-2">Corporate Law</span>
+                      <h3 className="font-medium text-[#251c1a] mb-2 group-hover:text-[#c8a27c] transition-colors">Adani Settlement Pleas Delayed by SEBI's Review of Processes</h3>
+                      <p className="text-sm text-[#251c1a]/70">The Securities and Exchange Board of India's ongoing review of its settlement processes has delayed Adani Group's settlement pleas. Legal experts suggest this indicates regulatory scrutiny over high-profile corporate governance cases...</p>
+                      <div className="mt-3 pt-3 border-t border-dashed border-[#c8a27c]/20">
+                        <p className="text-xs text-[#251c1a]/50">Source: <a href="https://legal.economictimes.indiatimes.com" target="_blank" rel="noopener noreferrer" className="text-[#c8a27c] hover:underline">ET Legal</a></p>
+                      </div>
                     </div>
                   </a>
                 </div>
@@ -527,6 +542,7 @@ const Dashboard = () => {
                 <div className="p-5 sm:p-6 border-t border-[#c8a27c]/20 bg-[#f9f6f1] flex justify-end rounded-b-2xl">
                   <a 
                     href={activeModal === 'documentReader' ? 'https://lawgic-case-doc-reader.onrender.com/' : '#'}
+
                     target={activeModal === 'documentReader' ? '_blank' : '_self'}
                     rel="noopener noreferrer"
                     className="bg-[#251c1a] text-white py-2 px-6 rounded-lg hover:bg-[#3b2a25] transition-colors text-sm sm:text-base font-medium flex items-center"

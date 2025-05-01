@@ -262,38 +262,61 @@ function Navbar() {
                                     </button>
                                     
                                     {showProfileDropdown && (
-                                        <div className="absolute right-0 mt-2 w-56 bg-white rounded-lg shadow-xl py-2 z-50">
-                                            <div className="px-4 py-3 border-b border-gray-100">
-                                                <p className="font-semibold text-[#251c1a]">{currentUser.displayName || "User"}</p>
-                                                <p className="text-xs text-[#251c1a]/60 truncate mt-0.5">{currentUser.email}</p>
+                                        <div className="absolute right-0 mt-2 w-64 bg-white rounded-lg shadow-xl py-2 z-50 animate-fadeIn">
+                                            <div className="px-4 py-4 border-b border-gray-100">
+                                                <div className="flex items-center">
+                                                    <div className="h-12 w-12 rounded-full bg-[#c8a27c]/20 flex items-center justify-center overflow-hidden mr-3">
+                                                        {currentUser.photoURL ? (
+                                                            <img 
+                                                                src={currentUser.photoURL} 
+                                                                alt="Profile" 
+                                                                className="h-full w-full object-cover"
+                                                            />
+                                                        ) : (
+                                                            <span className="text-lg font-medium text-[#c8a27c]">
+                                                                {currentUser.displayName?.charAt(0) || <FaUser />}
+                                                            </span>
+                                                        )}
+                                                    </div>
+                                                    <div className="flex-1 min-w-0">
+                                                        <p className="font-semibold text-[#251c1a] text-base">{currentUser.displayName || "User"}</p>
+                                                        <p className="text-xs text-[#251c1a]/60 truncate mt-0.5">{currentUser.email}</p>
+                                                    </div>
+                                                </div>
                                             </div>
                                             
                                             <Link 
                                                 to="/profile"
                                                 onClick={() => setShowProfileDropdown(false)}
-                                                className="flex items-center px-4 py-2.5 hover:bg-[#251c1a]/5 transition-colors"
+                                                className="flex items-center px-4 py-3 hover:bg-[#f9f6f1] transition-colors group"
                                             >
-                                                <FaUserEdit className="text-[#251c1a]/70 mr-3" />
-                                                <span className="text-sm text-[#251c1a]">Profile Settings</span>
+                                                <div className="w-9 h-9 rounded-full bg-[#c8a27c]/10 flex items-center justify-center mr-3 group-hover:bg-[#c8a27c]/20 transition-colors">
+                                                    <FaUserEdit className="text-[#c8a27c]" />
+                                                </div>
+                                                <span className="text-sm text-[#251c1a] font-medium">Profile Settings</span>
                                             </Link>
                                             
                                             <Link 
                                                 to="/dashboard"
                                                 onClick={() => setShowProfileDropdown(false)}
-                                                className="flex items-center px-4 py-2.5 hover:bg-[#251c1a]/5 transition-colors"
+                                                className="flex items-center px-4 py-3 hover:bg-[#f9f6f1] transition-colors group"
                                             >
-                                                <FaTachometerAlt className="text-[#251c1a]/70 mr-3" />
-                                                <span className="text-sm text-[#251c1a]">Dashboard</span>
+                                                <div className="w-9 h-9 rounded-full bg-[#c8a27c]/10 flex items-center justify-center mr-3 group-hover:bg-[#c8a27c]/20 transition-colors">
+                                                    <FaTachometerAlt className="text-[#c8a27c]" />
+                                                </div>
+                                                <span className="text-sm text-[#251c1a] font-medium">Dashboard</span>
                                             </Link>
                                             
                                             <div className="border-t border-gray-100 my-1"></div>
                                             
                                             <button 
                                                 onClick={handleLogout}
-                                                className="flex items-center w-full text-left px-4 py-2.5 text-red-600 hover:bg-red-50 transition-colors"
+                                                className="flex items-center w-full text-left px-4 py-3 hover:bg-[#f9f6f1] transition-colors group"
                                             >
-                                                <FaSignOutAlt className="mr-3" />
-                                                <span className="text-sm">Sign Out</span>
+                                                <div className="w-9 h-9 rounded-full bg-red-50 flex items-center justify-center mr-3 group-hover:bg-red-100 transition-colors">
+                                                    <FaSignOutAlt className="text-red-500" />
+                                                </div>
+                                                <span className="text-sm text-red-600 font-medium">Sign Out</span>
                                             </button>
                                         </div>
                                     )}
